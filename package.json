@@ -1,12 +1,22 @@
 {
-  "name": "file-db",
-  "version": "1.0.0",
-  "description": "",
+  "name": "srcdb",
+  "version": "1.0.2",
+  "description": "FileDB is light weight open source No-SQL database uses document data model for store and retrieve data.",
   "main": "index.js",
+  "bin": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "keywords": [
+    "database",
+    "no-sql"
+  ],
+  "author": "Ahmed Ibrahim",
+  "license": "MIT" ,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AhmedIbrahim336/FileDB.git" 
+  },
+  "homepage": "https://github.com/AhmedIbrahim336/FileDB#readme"
+
 }
