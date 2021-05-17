@@ -38,7 +38,7 @@ class Document {
     jsonData.push(data);
     fs.writeFileSync(docPath, JSON.stringify(jsonData));
   }
-  
+
 
   insertMany(dataArr) {
     if (!this._isDocExist(this.docPath)) thsi._docNotFoundError();
@@ -50,6 +50,7 @@ class Document {
     }
   }
 
+  
   find() {
     // check if the doc exist
     if (!this._isDocExist()) this._docNotFoundError();
