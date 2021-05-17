@@ -3,6 +3,7 @@ const path = require('path');
 const { v4 } = require('uuid');
 const Save = require('./classes/Save');
 const limit = require('./helpers/limit');
+const { skip } = require('./helpers/skip');
 const {
   getDataJson,
   isDocExist,
@@ -73,10 +74,12 @@ class Document {
     if (!isDocExist(this.collectionPath)) docNotFoundError();
 
     // read the file
-    const data = getDataJson(this.collectionPath);
+    let data = getDataJson(this.collectionPath);
     // apply filters
 
-    if (filter && filter.limit) return limit(filter.limit, data);
+    if (filter && filter.skip) data = skip(data, filter.skip);
+
+    if (filter && filter.limit) data = limit(filter.limit, data);
     return data;
   }
 
