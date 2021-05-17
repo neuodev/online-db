@@ -98,7 +98,8 @@ class Document {
       documents[documentIdx][field] = fields[field];
     }
 
-    
+    this._writeData(documents);
+    // return documents[documentIdx];
   }
 
   // Utils
@@ -117,5 +118,10 @@ class Document {
   _getDataJson() {
     const allDocs = fs.readFileSync(this.docPath);
     return JSON.parse(allDocs);
+  }
+
+  _writeData(data) {
+    if (!data) this._throwError("Data isn't provide ");
+    fs.writeFileSync(this.docPath, JSON.stringify(data));
   }
 }

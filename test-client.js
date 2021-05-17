@@ -16,9 +16,11 @@ const main = () => {
   // });
 
   try {
-    user.updateOneById('1', {
+    const updatedUser = user.updateOneById('1', {
       age: 80,
     });
+
+    console.log(updatedUser);
   } catch (err) {
     console.log(err.message);
   }
