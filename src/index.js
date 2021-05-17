@@ -59,7 +59,7 @@ class Document {
   }
 
   // Find all the items related to one document
-  find() {
+  find(filter) {
     // check if the doc exist
     if (!this._isDocExist()) this._docNotFoundError();
 
