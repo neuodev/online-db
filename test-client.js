@@ -4,21 +4,12 @@ const main = () => {
   // create db
   const db = new FileDB('db');
 
-  const user = db.createDocument('user');
-  user.insertMany([
-    {
-      name: 'Ahmed',
-      age: 20,
-    },
-    {
-      name: 'Hend',
-      age: 22,
-    },
-    {
-      name: 'Jone',
-      age: 50,
-    },
-  ]);
+  const user = db.createCollection('user');
+
+  //   user.insertMany([{ id: '1', name: 'Jone', age: 50 }]);
+  //   const users = user.find();
+  const findUser = user.findOneById('4');
+  console.log(findUser);
 };
 
 main();

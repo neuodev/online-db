@@ -12,7 +12,7 @@ module.exports = class FileDB {
     if (!fs.existsSync(`./${this.dbName}`)) fs.mkdirSync(`./${this.dbName}`);
   }
 
-  createDocument(docName) {
+  createCollection(docName) {
     if (!docName) throw new Error('Document name is required');
     const docFile = `./${this.dbName}/${docName}.json`;
 
@@ -20,7 +20,6 @@ module.exports = class FileDB {
 
     return new Document(docName, this.dbName);
   }
-
 };
 
 class Document {
@@ -39,7 +38,6 @@ class Document {
     fs.writeFileSync(docPath, JSON.stringify(jsonData));
   }
 
-
   insertMany(dataArr) {
     if (!this._isDocExist(this.docPath)) thsi._docNotFoundError();
     if (!(dataArr instanceof Array))
@@ -50,7 +48,7 @@ class Document {
     }
   }
 
-
+  // Find all the items related to one document
   find() {
     // check if the doc exist
     if (!this._isDocExist()) this._docNotFoundError();
@@ -60,7 +58,17 @@ class Document {
 
     return data;
   }
-  
+
+  // find one document by id
+  // Return null if isn't exist
+  findOneById(id) {
+    if (!id) throw new Error('Expected an ID to find the document');
+    const documents = this._getDataJson();
+
+    const document = documents.find(item => item.id === id);
+
+    return document;
+  }
 
   // Utils
   _isDocExist() {
