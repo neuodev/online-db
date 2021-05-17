@@ -31,11 +31,11 @@ class Document {
 
   insertOne(data) {
     const collectionPath = this.collectionPath;
-    if (!this._isDocExist(docPath)) this._docNotFoundError();
-    const allDocs = fs.readFileSync(docPath);
+    if (!this._isDocExist(collectionPath)) this._docNotFoundError();
+    const allDocs = fs.readFileSync(collectionPath);
     const jsonData = JSON.parse(allDocs);
     jsonData.push(data);
-    fs.writeFileSync(docPath, JSON.stringify(jsonData));
+    fs.writeFileSync(collectionPath, JSON.stringify(jsonData));
   }
 
   insertMany(dataArr) {
