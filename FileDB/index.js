@@ -20,7 +20,7 @@ module.exports = class FileDB {
 
     return new Document(docName, this.dbName);
   }
-  
+
 };
 
 class Document {
@@ -38,6 +38,7 @@ class Document {
     jsonData.push(data);
     fs.writeFileSync(docPath, JSON.stringify(jsonData));
   }
+  
 
   insertMany(dataArr) {
     if (!this._isDocExist(this.docPath)) thsi._docNotFoundError();
