@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { v4 } = require('uuid');
-module.exports = class FileDB {
+module.exports = class DocDB {
   constructor(dbName) {
     this.dbName = dbName;
     this._init();

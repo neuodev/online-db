@@ -1,3 +1,3 @@
-const FileDB = require('./src');
+const DocDB = require('./src');
 
-module.exports.FileDB = FileDB;
+module.exports.DocDB = DocDB;
