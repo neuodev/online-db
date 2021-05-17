@@ -68,10 +68,10 @@ class Document {
   // Find all the items related to one document
   find(filter) {
     // check if the doc exist
-    if (!this._isDocExist()) this._docNotFoundError();
+    if (!isDocExist(this.collectionPath)) docNotFoundError();
 
     // read the file
-    const data = this._getDataJson();
+    const data = getDataJson(this.collectionPath);
 
     return data;
   }
