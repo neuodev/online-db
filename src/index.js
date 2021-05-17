@@ -53,8 +53,6 @@ class Document {
 
     const jsonData = JSON.parse(allDocs);
     jsonData.push(data);
-    // fs.writeFileSync(collectionPath, JSON.stringify(jsonData));
-
     return new Save(jsonData, this.collectionPath);
   }
 
@@ -64,7 +62,7 @@ class Document {
       throw new Error('Method only accept array of items');
 
     for (let item of dataArr) {
-      this.insertOne(item);
+      this.insertOne(item).save();
     }
   }
 
