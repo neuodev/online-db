@@ -29,6 +29,11 @@ class Document {
     this.collectionPath = `./${this.dbName}/${this.docName}.json`;
   }
 
+  count() {
+    const data = this._getDataJson();
+    return data.length;
+  }
+
   insertOne(data) {
     const collectionPath = this.collectionPath;
     if (!this._isDocExist(collectionPath)) this._docNotFoundError();
