@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { v4 } = require('uuid');
+const Save = require('./classes/Save');
 const {
   getDataJson,
   isDocExist,
@@ -52,7 +53,9 @@ class Document {
 
     const jsonData = JSON.parse(allDocs);
     jsonData.push(data);
-    fs.writeFileSync(collectionPath, JSON.stringify(jsonData));
+    // fs.writeFileSync(collectionPath, JSON.stringify(jsonData));
+
+    return new Save(jsonData, this.collectionPath);
   }
 
   insertMany(dataArr) {
