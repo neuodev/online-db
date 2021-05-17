@@ -18,6 +18,7 @@ const main = () => {
   try {
     const updatedUser = user.updateOneById('1', {
       age: 80,
+      name: 'Jane',
     });
 
     console.log(updatedUser);

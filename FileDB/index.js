@@ -26,11 +26,11 @@ class Document {
   constructor(docName, dbName) {
     this.docName = docName;
     this.dbName = dbName;
-    this.docPath = `./${this.dbName}/${this.docName}.json`;
+    this.collectionPath = `./${this.dbName}/${this.docName}.json`;
   }
 
   insertOne(data) {
-    const docPath = this.docPath;
+    const collectionPath = this.collectionPath;
     if (!this._isDocExist(docPath)) this._docNotFoundError();
     const allDocs = fs.readFileSync(docPath);
     const jsonData = JSON.parse(allDocs);
@@ -39,7 +39,7 @@ class Document {
   }
 
   insertMany(dataArr) {
-    if (!this._isDocExist(this.docPath)) thsi._docNotFoundError();
+    if (!this._isDocExist(this.collectionPath)) thsi._docNotFoundError();
     if (!(dataArr instanceof Array))
       throw new Error('Method only accept array of items');
 
@@ -104,7 +104,7 @@ class Document {
 
   // Utils
   _isDocExist() {
-    return fs.existsSync(this.docPath);
+    return fs.existsSync(this.collectionPath);
   }
 
   _docNotFoundError() {
@@ -116,12 +116,12 @@ class Document {
   }
 
   _getDataJson() {
-    const allDocs = fs.readFileSync(this.docPath);
+    const allDocs = fs.readFileSync(this.collectionPath);
     return JSON.parse(allDocs);
   }
 
   _writeData(data) {
     if (!data) this._throwError("Data isn't provide ");
-    fs.writeFileSync(this.docPath, JSON.stringify(data));
+    fs.writeFileSync(this.collectionPath, JSON.stringify(data));
   }
 }
