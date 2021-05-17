@@ -2,11 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const { v4 } = require('uuid');
 const Collection = require('./classes/Collection');
-
+const { initDB } = require('./utils/utils');
 module.exports = class OnlineDB {
   constructor(dbName) {
     this.dbName = dbName;
-    this._init();
+    initDB(dbName);
   }
 
   _init() {
