@@ -50,7 +50,7 @@ class Document {
     }
   }
 
-  
+
   find() {
     // check if the doc exist
     if (!this._isDocExist()) this._docNotFoundError();
@@ -60,6 +60,7 @@ class Document {
 
     return data;
   }
+  
 
   // Utils
   _isDocExist() {
