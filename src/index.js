@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { v4 } = require('uuid');
 const Save = require('./classes/Save');
+const limit = require('./helpers/limit');
 const {
   getDataJson,
   isDocExist,
@@ -73,7 +74,9 @@ class Document {
 
     // read the file
     const data = getDataJson(this.collectionPath);
+    // apply filters
 
+    if (filter && filter.limit) return limit(filter.limit, data);
     return data;
   }
 
