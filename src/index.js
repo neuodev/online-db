@@ -143,8 +143,8 @@ class Document {
 
     this._writeData(documents);
   }
-  // Delete one by id
-  deleteOne(filter) {
+  // Delete many documents with given filter 
+  deleteMany(filter) {
     if (!(filter instanceof Object))
       this._throwError('Filter should be type of object');
     let documents = this._getDataJson();
@@ -157,7 +157,9 @@ class Document {
     if (idx === -1) this._throwError("Document dont' found ");
 
     // delete the document
-    documents = documents.filter(document => document.id !== id);
+    documents = documents.filter(
+      document => document[filterKeys[0]] !== filter[filterKeys[0]]
+    );
 
     this._writeData(documents);
   }
