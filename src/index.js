@@ -128,7 +128,21 @@ class Document {
 
     this._writeData(documents);
   }
+  // Delete one by id
+  deleteOneById(id) {
+    if (!id) this._throwError('Expected id');
+    if(typeof id != 'string') this._throwError('id should be type of string')
+    let documents = this._getDataJson();
 
+    // check if the document exist
+    const idx = documents.findIndex(document => document.id === id);
+    if (idx === -1) this._throwError("Document dont' found ");
+
+    // delete the document
+    documents = documents.filter(document => document.id !== id);
+
+    this._writeData(documents);
+  }
   // Utils
   _isDocExist() {
     return fs.existsSync(this.collectionPath);
