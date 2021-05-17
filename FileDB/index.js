@@ -82,6 +82,24 @@ class Document {
 
     return document;
   }
+  // Find one document and update it
+  // @return the updated document
+  updateOneById(id, fields) {
+    if (!id) this._throwError('Expected id for updating ');
+    if (!(fields instanceof Object))
+      this._throwError('Expected fileds to be object');
+
+    const documents = this._getDataJson();
+
+    const documentIdx = documents.findIndex(document => document.id === id);
+    if (documentIdx === -1) this._throwError('Document Not Found');
+
+    for (let field in fields) {
+      documents[documentIdx][field] = fields[field];
+    }
+
+    
+  }
 
   // Utils
   _isDocExist() {
@@ -90,6 +108,10 @@ class Document {
 
   _docNotFoundError() {
     throw new Error("Document doesn't exist");
+  }
+
+  _throwError(message) {
+    throw new Error(message);
   }
 
   _getDataJson() {

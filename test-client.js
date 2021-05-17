@@ -11,11 +11,17 @@ const main = () => {
   //   const findUser = user.findOneById('4');
   //   console.log(findUser);
 
-  const findUser = user.findOne({
-    name: 'Jone',
-  });
+  // const findUser = user.findOne({
+  //   name: 'Jone',
+  // });
 
-  console.log(findUser);
+  try {
+    user.updateOneById('1', {
+      age: 80,
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
 };
 
 main();
