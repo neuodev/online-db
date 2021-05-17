@@ -20,6 +20,7 @@ module.exports = class FileDB {
 
     return new Document(docName, this.dbName);
   }
+  
 };
 
 class Document {
