@@ -12,11 +12,13 @@
     "no-sql"
   ],
   "author": "Ahmed Ibrahim",
-  "license": "MIT" ,
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AhmedIbrahim336/FileDB.git" 
+    "url": "git+https://github.com/AhmedIbrahim336/FileDB.git"
   },
-  "homepage": "https://github.com/AhmedIbrahim336/FileDB#readme"
-
+  "homepage": "https://github.com/AhmedIbrahim336/FileDB#readme",
+  "dependencies": {
+    "uuid": "^8.3.2"
+  }
 }

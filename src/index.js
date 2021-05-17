@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-
+const { v4 } = require('uuid');
 module.exports = class FileDB {
   constructor(dbName) {
     this.dbName = dbName;
@@ -33,6 +33,11 @@ class Document {
     const collectionPath = this.collectionPath;
     if (!this._isDocExist(collectionPath)) this._docNotFoundError();
     const allDocs = fs.readFileSync(collectionPath);
+
+    if (!data.id) {
+      data.id = v4() ;
+    }
+
     const jsonData = JSON.parse(allDocs);
     jsonData.push(data);
     fs.writeFileSync(collectionPath, JSON.stringify(jsonData));
