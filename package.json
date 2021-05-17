@@ -1,7 +1,7 @@
 {
-  "name": "srcdb",
-  "version": "1.0.2",
-  "description": "FileDB is light weight open source No-SQL database uses document data model for store and retrieve data.",
+  "name": "onlinedb",
+  "version": "1.0.0",
+  "description": "OnlineDB is light weight open source No-SQL database uses document data model for store and retrieve data.",
   "main": "index.js",
   "bin": "index.js",
   "scripts": {
