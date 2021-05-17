@@ -8,7 +8,13 @@ const main = () => {
 
   //   user.insertMany([{ id: '1', name: 'Jone', age: 50 }]);
   //   const users = user.find();
-  const findUser = user.findOneById('4');
+  //   const findUser = user.findOneById('4');
+  //   console.log(findUser);
+
+  const findUser = user.findOne({
+    name: 'Jone',
+  });
+
   console.log(findUser);
 };
 

@@ -70,6 +70,19 @@ class Document {
     return document;
   }
 
+  //   find one document
+  findOne(citeria) {
+    if (!(citeria instanceof Object)) throw new Error('Expected object');
+    const documents = this._getDataJson();
+    const keys = Object.keys(citeria);
+    // @todo add an utild to do this for all citerias
+    const document = documents.find(
+      document => document[keys[0]] === citeria[keys[0]]
+    );
+
+    return document;
+  }
+
   // Utils
   _isDocExist() {
     return fs.existsSync(this.docPath);
