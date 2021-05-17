@@ -35,7 +35,7 @@ class Document {
     const allDocs = fs.readFileSync(collectionPath);
 
     if (!data.id) {
-      data.id = v4() ;
+      data.id = v4();
     }
 
     const jsonData = JSON.parse(allDocs);
@@ -107,6 +107,28 @@ class Document {
     // return documents[documentIdx];
   }
 
+  updateOne(filter, updates) {
+    if (!(filter instanceof Object))
+      this._throwError('Expected filter to be an object');
+    if (!(updates instanceof Object))
+      this._throwError('Expected updates to be an object');
+
+    const filterKeys = Object.keys(filter);
+    const documents = this._getDataJson();
+
+    const documentIdx = documents.findIndex(
+      document => document[filterKeys[0]] === filter[filterKeys[0]]
+    );
+
+    if (documentIdx === -1) this._throwError('Document not found');
+    documents[documentIdx] = {
+      ...documents[documentIdx],
+      ...updates,
+    };
+
+    this._writeData(documents);
+  }
+
   // Utils
   _isDocExist() {
     return fs.existsSync(this.collectionPath);
@@ -126,7 +148,7 @@ class Document {
   }
 
   _writeData(data) {
-    if (!data) this._throwError("Data isn't provide ");
+    if (!data) this._throwError("Data isn't exist ");
     fs.writeFileSync(this.collectionPath, JSON.stringify(data));
   }
 }
