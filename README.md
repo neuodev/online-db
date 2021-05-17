@@ -1,12 +1,12 @@
-# FileDB
-FileDB is light weight open source No-SQL database uses document data model for store and retrieve data.
+# OnlineDB
 
+OnlineDB is light weight open source No-SQL database uses document data model for store and retrieve data.
 
-## Simple example  
-        
-          const { FileDB } = require('./file-db');
+## Simple example
 
-          const db = new FileDB('db');
+          const { OnlineDB } = require('./file-db');
+
+          const db = new OnlineDB('db');
 
           const user = db.createCollection('users');
 
@@ -21,4 +21,4 @@ FileDB is light weight open source No-SQL database uses document data model for 
           const users = user.find();
 
 
-          
+
