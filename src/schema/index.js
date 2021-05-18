@@ -1,3 +1,4 @@
+const { checkArrayOfType } = require('../types/types');
 const { throwError } = require('../utils/utils');
 
 module.exports = class Schema {
@@ -10,9 +11,17 @@ module.exports = class Schema {
       const schemaFieldValue = this.schema[schemaField];
       const dataFieldValue = data[schemaField];
 
-      // if(typeof )
-
-      if (
+      if (schemaFieldValue instanceof Array) {
+        // check if the data field is an array
+        if (!(dataFieldValue instanceof Array))
+          throwError(
+            `Exprected filed ${schemaField} to be of type Array but get type ${typeof dataFieldValue}`
+          );
+        // check if it has single value or an object
+        if (schemaFieldValue[0].type) {
+          checkArrayOfType(dataFieldValue, schemaFieldValue, schemaField);
+        }
+      } else if (
         typeof schemaFieldValue === 'function' &&
         typeof schemaFieldValue() !== typeof dataFieldValue
       ) {
