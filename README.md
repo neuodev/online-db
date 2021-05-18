@@ -4,7 +4,7 @@ OnlineDB is light weight open source No-SQL database uses document data model fo
 
 ## Simple example
 
-          const { OnlineDB } = require('./file-db');
+          const { OnlineDB } = require('onlinedb');
 
           const db = new OnlineDB('db');
 

@@ -1,3 +1,6 @@
 const OnlineDB = require('./src');
-
-module.exports.OnlineDB = OnlineDB;
+const Schema = require('./src/schema');
+module.exports = {
+  OnlineDB,
+  Schema,
+};
