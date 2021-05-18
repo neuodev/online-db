@@ -7,11 +7,17 @@ module.exports = class Schema {
 
   validateDataAganistSchema(data) {
     for (let schemaField in this.schema) {
-      const schemaType = typeof this.schema[schemaField]();
-      const dataType = typeof data[schemaField];
-      if (schemaType !== dataType) {
+      const schemaFieldValue = this.schema[schemaField];
+      const dataFieldValue = data[schemaField];
+
+      // if(typeof )
+
+      if (
+        typeof schemaFieldValue === 'function' &&
+        typeof schemaFieldValue() !== typeof dataFieldValue
+      ) {
         throwError(
-          ` Field ${schemaField} expected type of ${schemaType} but get type of ${dataType} `
+          ` Field ${typeof schemaFieldValue()} expected type of ${typeof schemaFieldValue()} but get type of ${typeof dataFieldValue} `
         );
       }
     }
