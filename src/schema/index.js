@@ -1,6 +1,6 @@
 const { checkArrayOfType } = require('../types/types');
 const { throwError } = require('../utils/utils');
-
+const { checkForPremitiveValues } = require('../types/typesUtils');
 module.exports = class Schema {
   constructor(schemaFields) {
     this.schema = schemaFields;
@@ -21,10 +21,7 @@ module.exports = class Schema {
         if (schemaFieldValue[0].type) {
           checkArrayOfType(dataFieldValue, schemaFieldValue, schemaField);
         }
-      } else if (
-        typeof schemaFieldValue === 'function' &&
-        typeof schemaFieldValue() !== typeof dataFieldValue
-      ) {
+      } else if (checkForPremitiveValues(schemaFieldValue, dataFieldValue)) {
         throwError(
           ` Field ${typeof schemaFieldValue()} expected type of ${typeof schemaFieldValue()} but get type of ${typeof dataFieldValue} `
         );
