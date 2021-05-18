@@ -9,12 +9,13 @@ const {
   writeData,
 } = require('../utils/utils');
 module.exports = class Collection {
-  constructor(docName, dbName) {
+  constructor(docName, dbName, schema) {
     this.docName = docName;
     this.dbName = dbName;
     this.collectionPath = `./${this.dbName}/${this.docName}.json`;
+    this.schema = schema
   }
-
+  
   count() {
     const data = getDataJson(this.collectionPath);
     return data.length;

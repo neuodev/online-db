@@ -14,12 +14,12 @@ module.exports = class OnlineDB {
     if (!fs.existsSync(`./${this.dbName}`)) fs.mkdirSync(`./${this.dbName}`);
   }
 
-  createCollection(docName) {
+  createCollection(docName, schema) {
     if (!docName) throw new Error('Document name is required');
     const docFile = `./${this.dbName}/${docName}.json`;
 
     if (!fs.existsSync(docFile)) fs.writeFileSync(docFile, JSON.stringify([]));
 
-    return new Collection(docName, this.dbName);
+    return new Collection(docName, this.dbName, schema);
   }
 };
