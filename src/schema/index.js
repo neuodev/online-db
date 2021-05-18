@@ -3,4 +3,7 @@ module.exports = class Schema {
     this.schema = schemaFields;
   }
 
+  validateDataAganistSchema(data) {
+    console.log(data, this.schema);
+  }
 };

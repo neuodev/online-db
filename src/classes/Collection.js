@@ -1,6 +1,7 @@
 const Save = require('./Save');
 const limit = require('../helpers/limit');
 const { skip } = require('../helpers/skip');
+const { v4 } = require('uuid');
 const {
   getDataJson,
   isDocExist,
@@ -13,9 +14,9 @@ module.exports = class Collection {
     this.docName = docName;
     this.dbName = dbName;
     this.collectionPath = `./${this.dbName}/${this.docName}.json`;
-    this.schema = schema
+    this.schema = schema;
   }
-  
+
   count() {
     const data = getDataJson(this.collectionPath);
     return data.length;
@@ -24,15 +25,16 @@ module.exports = class Collection {
   insertOne(data) {
     const collectionPath = this.collectionPath;
     if (!isDocExist(collectionPath)) docNotFoundError();
-    const allDocs = fs.readFileSync(collectionPath);
+    const collection = getDataJson(collectionPath);
+
+    this.schema.validateDataAganistSchema(data);
 
     if (!data.id) {
       data.id = v4();
     }
-
-    const jsonData = JSON.parse(allDocs);
-    jsonData.push(data);
-    return new Save(jsonData, this.collectionPath);
+    collection.push(data);
+    writeData(collection, collectionPath);
+    return data;
   }
 
   insertMany(dataArr) {
