@@ -17,9 +17,30 @@ module.exports = class Schema {
           throwError(
             `Exprected filed ${schemaField} to be of type Array but get type ${typeof dataFieldValue}`
           );
+        // only the type filed should have one item in the array
+        if (schemaFieldValue.length > 1)
+          throwError(
+            `Invalid schema at ${schemaField}. you have more than one item in the array`
+          );
         // check if it has single value or an object
         if (schemaFieldValue[0].type) {
           checkArrayOfType(dataFieldValue, schemaFieldValue, schemaField);
+        } else {
+          let subSchema = schemaFieldValue[0];
+          for (let subDataItem of dataFieldValue) {
+            for (let subSchemaField in subSchema) {
+              if (
+                checkForPremitiveValues(
+                  subSchema[subSchemaField],
+                  subDataItem[subSchemaField]
+                )
+              ) {
+                throwError(
+                  ` Field ${ subSchemaField} expected type of ${typeof subSchema[subSchemaField]()} but get type of ${typeof subDataItem[subSchemaField]} `
+                );
+              }
+            }
+          }
         }
       } else if (checkForPremitiveValues(schemaFieldValue, dataFieldValue)) {
         throwError(
