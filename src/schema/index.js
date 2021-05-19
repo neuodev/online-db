@@ -1,8 +1,8 @@
-const { checkArrayType } = require('../types/types');
+const { checkArrayType, checkObjectType } = require('../types/types');
 const { throwError } = require('../utils/utils');
 const {
   checkForPremitiveValues,
-  checkForObjectType,
+  isObjectType,
   checkForCriteriaObject,
   isRequired,
 } = require('../types/typesUtils');
@@ -18,22 +18,9 @@ module.exports = class Schema {
 
       if (schemaFieldValue instanceof Array) {
         checkArrayType(dataFieldValue, schemaField, schemaFieldValue);
-      } else if (checkForObjectType(schemaFieldValue)) {
+      } else if (isObjectType(schemaFieldValue)) {
         // there this thow coditions one -> item of object
-        for (let subSchemaField in schemaFieldValue) {
-          if (
-            checkForPremitiveValues(
-              schemaFieldValue[subSchemaField],
-              dataFieldValue[subSchemaField]
-            )
-          ) {
-            throwError(
-              ` Field "${subSchemaField} in ${schemaField} object" expected type of ${typeof schemaFieldValue[
-                subSchemaField
-              ]()} but get type of ${typeof dataFieldValue[subSchemaField]} `
-            );
-          }
-        }
+        checkObjectType(schemaFieldValue, dataFieldValue ,schemaField);
       } else if (checkForCriteriaObject(schemaFieldValue)) {
         // this called the criteria object.
         // Example meta : { type: String, requried: true }

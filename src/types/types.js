@@ -1,3 +1,4 @@
+const { checkObjectTypeError } = require('../errors/schemaErrors');
 const { throwError } = require('../utils/utils');
 const { checkForPremitiveValues } = require('./typesUtils');
 
@@ -46,7 +47,26 @@ const checkArrayType = (dataFieldValue, schemaField, schemaFieldValue) => {
   }
 };
 
+const checkObjectType = (schemaFieldValue, dataFieldValue, schemaField) => {
+  for (let subSchemaField in schemaFieldValue) {
+    if (
+      checkForPremitiveValues(
+        schemaFieldValue[subSchemaField],
+        dataFieldValue[subSchemaField]
+      )
+    ) {
+      checkObjectTypeError(
+        subSchemaField,
+        schemaField,
+        dataFieldValue,
+        schemaFieldValue
+      );
+    }
+  }
+};
+
 module.exports = {
   checkArrayOfType,
   checkArrayType,
+  checkObjectType,
 };

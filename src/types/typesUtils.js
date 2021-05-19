@@ -7,7 +7,7 @@ const checkForPremitiveValues = (schemaFieldValue, dataFieldValue) => {
   );
 };
 
-const checkForObjectType = schemaFieldValue => {
+const isObjectType = schemaFieldValue => {
   return (
     schemaFieldValue instanceof Object &&
     typeof schemaFieldValue !== 'function' &&
@@ -36,7 +36,7 @@ const isRequired = schemaFieldValue => {
 };
 module.exports = {
   checkForPremitiveValues,
-  checkForObjectType,
+  isObjectType,
   checkForCriteriaObject,
   isRequired,
 };
