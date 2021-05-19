@@ -41,10 +41,14 @@ const isEmail = email => {
 
   return emailRegEx.test(email);
 };
+
+const checkEnum = () => {};
+
 module.exports = {
   checkForPremitiveValues,
   isObjectType,
   checkForCriteriaObject,
   isRequired,
   isEmail,
+  checkEnum
 };

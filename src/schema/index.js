@@ -6,6 +6,7 @@ const {
   checkForCriteriaObject,
   isRequired,
   isEmail,
+  checkEnum,
 } = require('../types/typesUtils');
 
 const { lengthCheck } = require('../helpers/lengthCheck');
@@ -29,20 +30,19 @@ module.exports = class Schema {
       } else if (checkForCriteriaObject(schemaFieldValue)) {
         // this called the criteria object.
         // Example meta : { type: String, requried: true }
-        // check for email with type string
-        emailCheck(schemaFieldValue, dataFieldValue, schemaField);
-        // check for regExp
-        regExpCheck(schemaFieldValue, dataFieldValue, schemaField);
-        // check for maxLength and minLength properties
-        lengthCheck(schemaFieldValue, dataFieldValue, schemaField);
+        const mainParams = [schemaFieldValue, dataFieldValue, schemaField];
+        // check for `email` with type string
+        emailCheck(...mainParams);
+        // check for `regExp`
+        regExpCheck(...mainParams);
+        // check for `maxLength` and `minLength` properties
+        lengthCheck(...mainParams);
 
         // check for `minValue` and `maxValue` properties
-        if (
-          typeof schemaFieldValue.minValue !== 'undefined' ||
-          typeof schemaFieldValue.maxValue !== 'undefined'
-        ) {
-          valueCheck(schemaFieldValue, dataFieldValue, schemaField);
-        }
+        valueCheck(...mainParams);
+
+        // check for the `enum` field
+        checkEnum(...mainParams);
         // need to pass the exist check if it's not required
         // if the field exist and its requried so need to validate
         // what if its exsit and not required need to check its type
