@@ -1,6 +1,6 @@
 {
   "name": "onlinedb",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "OnlineDB is light weight open source No-SQL database uses document data model for store and retrieve data.",
   "main": "index.js",
   "bin": "index.js",
@@ -15,9 +15,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AhmedIbrahim336/FileDB.git"
+    "url": "git+https://github.com/AhmedIbrahim336/OnlineDB.git"
   },
-  "homepage": "https://github.com/AhmedIbrahim336/FileDB#readme",
+  "homepage": "https://github.com/AhmedIbrahim336/OnlineDB#readme",
   "dependencies": {
     "uuid": "^8.3.2"
   }
