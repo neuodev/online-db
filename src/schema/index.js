@@ -8,6 +8,7 @@ const {
 } = require('../types/typesUtils');
 
 const { lengthCheck } = require('../helpers/lengthCheck');
+const { valueCheck } = require('../helpers/valueCheck');
 module.exports = class Schema {
   constructor(schemaFields) {
     this.schema = schemaFields;
@@ -33,6 +34,13 @@ module.exports = class Schema {
           typeof schemaFieldValue.minLength !== 'undefined'
         ) {
           lengthCheck(schemaFieldValue, dataFieldValue, schemaField);
+        }
+        // check for `minValue` and `maxValue` properties
+        if (
+          typeof schemaFieldValue.minValue !== 'undefined' ||
+          typeof schemaFieldValue.maxValue !== 'undefined'
+        ) {
+          valueCheck(schemaFieldValue, dataFieldValue, schemaField);
         }
         // need to pass the exist check if it's not required
         // if the field exist and its requried so need to validate
