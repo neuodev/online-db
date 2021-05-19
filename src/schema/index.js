@@ -4,6 +4,7 @@ const {
   checkForPremitiveValues,
   checkForObjectType,
   checkForCriteriaObject,
+  isRequired,
 } = require('../types/typesUtils');
 module.exports = class Schema {
   constructor(schemaFields) {
@@ -34,7 +35,24 @@ module.exports = class Schema {
           }
         }
       } else if (checkForCriteriaObject(schemaFieldValue)) {
-        if (checkForPremitiveValues(schemaFieldValue.type, dataFieldValue)) {
+        // this called the criteria object.
+        // Example meta : { type: String, requried: true }
+        // need to pass the exist check if it's not required
+        // if the field exist and its requried so need to validate
+        // what if its exsit and not required need to check its type
+        if (
+          isRequired(schemaFieldValue) &&
+          checkForPremitiveValues(schemaFieldValue.type, dataFieldValue)
+        ) {
+          throwError(
+            ` Field "${schemaField}" expected type of ${typeof schemaFieldValue.type()} but get type of ${typeof dataFieldValue} `
+          );
+        }
+        if (
+          dataFieldValue &&
+          !isRequired(schemaFieldValue) &&
+          checkForPremitiveValues(schemaFieldValue.type, dataFieldValue)
+        ) {
           throwError(
             ` Field "${schemaField}" expected type of ${typeof schemaFieldValue.type()} but get type of ${typeof dataFieldValue} `
           );

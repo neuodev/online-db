@@ -1,3 +1,5 @@
+const { throwError } = require('../utils/utils');
+
 const checkForPremitiveValues = (schemaFieldValue, dataFieldValue) => {
   return (
     typeof schemaFieldValue === 'function' &&
@@ -21,8 +23,18 @@ const checkForCriteriaObject = schemaFieldValue => {
   );
 };
 
+const isRequired = schemaFieldValue => {
+  if (
+    schemaFieldValue.required &&
+    typeof schemaFieldValue.required !== 'boolean'
+  )
+    throwError(`required field can only be a boolean ( true or false )`);
+
+  return schemaFieldValue.required;
+};
 module.exports = {
   checkForPremitiveValues,
   checkForObjectType,
   checkForCriteriaObject,
+  isRequired,
 };
