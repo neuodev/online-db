@@ -6,6 +6,8 @@ const {
   checkForCriteriaObject,
   isRequired,
 } = require('../types/typesUtils');
+
+const { lengthCheck } = require('../helpers/lengthCheck');
 module.exports = class Schema {
   constructor(schemaFields) {
     this.schema = schemaFields;
@@ -20,10 +22,18 @@ module.exports = class Schema {
         checkArrayType(dataFieldValue, schemaField, schemaFieldValue);
       } else if (isObjectType(schemaFieldValue)) {
         // there this thow coditions one -> item of object
-        checkObjectType(schemaFieldValue, dataFieldValue ,schemaField);
+        checkObjectType(schemaFieldValue, dataFieldValue, schemaField);
       } else if (checkForCriteriaObject(schemaFieldValue)) {
         // this called the criteria object.
         // Example meta : { type: String, requried: true }
+
+        // check for maxLength and minLength properties
+        if (
+          typeof schemaFieldValue.maxLength !== 'undefined' ||
+          typeof schemaFieldValue.minLength !== 'undefined'
+        ) {
+          lengthCheck(schemaFieldValue, dataFieldValue, schemaField);
+        }
         // need to pass the exist check if it's not required
         // if the field exist and its requried so need to validate
         // what if its exsit and not required need to check its type
@@ -53,6 +63,17 @@ module.exports = class Schema {
         if (
           isRequired(schemaFieldValue) &&
           checkForPremitiveValues(schemaFieldValue.type, dataFieldValue) &&
+          typeof dataFieldValue !== 'undefined' &&
+          typeof schemaFieldValue.default !== 'undefined'
+        ) {
+          throwError(
+            ` Field "${schemaField}" expected type of ${typeof schemaFieldValue.type()} but get type of ${typeof dataFieldValue} `
+          );
+        }
+
+        if (
+          isRequired(schemaFieldValue) &&
+          checkForPremitiveValues(schemaFieldValue.type, dataFieldValue) &&
           typeof schemaFieldValue.default === 'undefined'
         ) {
           throwError(
@@ -60,7 +81,7 @@ module.exports = class Schema {
           );
         }
         if (
-          dataFieldValue &&
+          typeof dataFieldValue !== 'undefined' &&
           !isRequired(schemaFieldValue) &&
           checkForPremitiveValues(schemaFieldValue.type, dataFieldValue)
         ) {
