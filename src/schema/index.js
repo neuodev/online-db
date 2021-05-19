@@ -41,11 +41,29 @@ module.exports = class Schema {
         // if the field exist and its requried so need to validate
         // what if its exsit and not required need to check its type
         // throw an error if it's required and not exist
-        if (isRequired(schemaFieldValue) && !dataFieldValue)
-          throwError(`${schemaField} field is required`);
+        if (schemaFieldValue.default) {
+          if (
+            checkForPremitiveValues(
+              schemaFieldValue.type,
+              schemaFieldValue.default
+            )
+          )
+            throwError(
+              ` default value for the feild "${schemaField}" expected to be of type ${typeof schemaFieldValue.type()} but get type of ${typeof schemaFieldValue.default} `
+            );
+        }
+        if (isRequired(schemaFieldValue) && !dataFieldValue) {
+          if (typeof schemaFieldValue.default === 'undefined') {
+            throwError(`${schemaField} field is required`);
+          } else {
+            data[schemaField] = schemaFieldValue.default;
+          }
+        }
+
         if (
           isRequired(schemaFieldValue) &&
-          checkForPremitiveValues(schemaFieldValue.type, dataFieldValue)
+          checkForPremitiveValues(schemaFieldValue.type, dataFieldValue) &&
+          typeof schemaFieldValue.default === 'undefined'
         ) {
           throwError(
             ` Field "${schemaField}" expected type of ${typeof schemaFieldValue.type()} but get type of ${typeof dataFieldValue} `
