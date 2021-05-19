@@ -34,12 +34,8 @@ module.exports = class Schema {
         // check for regExp
         regExpCheck(schemaFieldValue, dataFieldValue, schemaField);
         // check for maxLength and minLength properties
-        if (
-          typeof schemaFieldValue.maxLength !== 'undefined' ||
-          typeof schemaFieldValue.minLength !== 'undefined'
-        ) {
-          lengthCheck(schemaFieldValue, dataFieldValue, schemaField);
-        }
+        lengthCheck(schemaFieldValue, dataFieldValue, schemaField);
+
         // check for `minValue` and `maxValue` properties
         if (
           typeof schemaFieldValue.minValue !== 'undefined' ||
