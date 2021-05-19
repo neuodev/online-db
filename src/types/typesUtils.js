@@ -24,6 +24,8 @@ const checkForCriteriaObject = schemaFieldValue => {
 };
 
 const isRequired = schemaFieldValue => {
+  //   if (schemaFieldValue.required ) return true;
+  if (typeof schemaFieldValue.required === 'undefined') return true;
   if (
     schemaFieldValue.required &&
     typeof schemaFieldValue.required !== 'boolean'

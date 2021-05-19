@@ -40,6 +40,9 @@ module.exports = class Schema {
         // need to pass the exist check if it's not required
         // if the field exist and its requried so need to validate
         // what if its exsit and not required need to check its type
+        // throw an error if it's required and not exist
+        if (isRequired(schemaFieldValue) && !dataFieldValue)
+          throwError(`${schemaField} field is required`);
         if (
           isRequired(schemaFieldValue) &&
           checkForPremitiveValues(schemaFieldValue.type, dataFieldValue)
