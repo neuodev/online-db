@@ -5,6 +5,15 @@ const checkForPremitiveValues = (schemaFieldValue, dataFieldValue) => {
   );
 };
 
+const checkForObjectType = schemaFieldValue => {
+  return (
+    schemaFieldValue instanceof Object &&
+    typeof schemaFieldValue !== 'function' &&
+    !schemaFieldValue.type
+  );
+};
+
 module.exports = {
   checkForPremitiveValues,
+  checkForObjectType,
 };

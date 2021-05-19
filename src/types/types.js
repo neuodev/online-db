@@ -1,4 +1,5 @@
 const { throwError } = require('../utils/utils');
+const { checkForPremitiveValues } = require('./typesUtils');
 
 const checkArrayOfType = (dataFieldValue, schemaFieldValue, schemaField) => {
   for (let item of dataFieldValue) {
