@@ -5,10 +5,12 @@ const {
   isObjectType,
   checkForCriteriaObject,
   isRequired,
+  isEmail,
 } = require('../types/typesUtils');
 
 const { lengthCheck } = require('../helpers/lengthCheck');
 const { valueCheck } = require('../helpers/valueCheck');
+const { emailCheck } = require('../helpers');
 module.exports = class Schema {
   constructor(schemaFields) {
     this.schema = schemaFields;
@@ -27,7 +29,8 @@ module.exports = class Schema {
       } else if (checkForCriteriaObject(schemaFieldValue)) {
         // this called the criteria object.
         // Example meta : { type: String, requried: true }
-
+        // check for email with type string
+        emailCheck(schemaFieldValue, dataFieldValue);
         // check for maxLength and minLength properties
         if (
           typeof schemaFieldValue.maxLength !== 'undefined' ||
