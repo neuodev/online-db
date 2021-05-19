@@ -34,7 +34,11 @@ module.exports = class Schema {
           }
         }
       } else if (checkForCriteriaObject(schemaFieldValue)) {
-        console.log('I am here', schemaFieldValue);
+        if (checkForPremitiveValues(schemaFieldValue.type, dataFieldValue)) {
+          throwError(
+            ` Field "${schemaField}" expected type of ${typeof schemaFieldValue.type()} but get type of ${typeof dataFieldValue} `
+          );
+        }
       } else if (checkForPremitiveValues(schemaFieldValue, dataFieldValue)) {
         throwError(
           ` Field "${schemaField}" expected type of ${typeof schemaFieldValue()} but get type of ${typeof dataFieldValue} `

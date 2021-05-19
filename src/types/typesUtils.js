@@ -17,7 +17,7 @@ const checkForCriteriaObject = schemaFieldValue => {
   return (
     schemaFieldValue instanceof Object &&
     typeof schemaField !== 'function' &&
-    schemaFieldValue.type 
+    schemaFieldValue.type
   );
 };
 
