@@ -10,7 +10,7 @@ const {
 
 const { lengthCheck } = require('../helpers/lengthCheck');
 const { valueCheck } = require('../helpers/valueCheck');
-const { emailCheck } = require('../helpers');
+const { emailCheck, regExpCheck } = require('../helpers');
 module.exports = class Schema {
   constructor(schemaFields) {
     this.schema = schemaFields;
@@ -30,7 +30,9 @@ module.exports = class Schema {
         // this called the criteria object.
         // Example meta : { type: String, requried: true }
         // check for email with type string
-        emailCheck(schemaFieldValue, dataFieldValue);
+        emailCheck(schemaFieldValue, dataFieldValue, schemaField);
+        // check for regExp
+        regExpCheck(schemaFieldValue, dataFieldValue, schemaField);
         // check for maxLength and minLength properties
         if (
           typeof schemaFieldValue.maxLength !== 'undefined' ||
