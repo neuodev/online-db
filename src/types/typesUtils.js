@@ -1,5 +1,5 @@
 const { throwError } = require('../utils/utils');
-
+const colros = require('colors');
 const checkForPremitiveValues = (schemaFieldValue, dataFieldValue) => {
   return (
     typeof schemaFieldValue === 'function' &&
@@ -42,7 +42,30 @@ const isEmail = email => {
   return emailRegEx.test(email);
 };
 
-const checkEnum = () => {};
+const vaildateEnum = (schemaFieldValue, schemaField) => {
+  if (!(schemaFieldValue.enum instanceof Array))
+    throwError(`Valid enums should be in a array in the  ${schemaField}`.bgRed);
+
+  for (let item of schemaFieldValue.enum) {
+    if (typeof item !== typeof schemaFieldValue.type())
+      throwError(
+        `Invalid Enum: enums for ${schemaField} field must have type of ${typeof schemaFieldValue.type()} but get type of ${typeof item} `
+      );
+  }
+};
+
+const checkEnum = (schemaFieldValue, dataFieldValue, schemaField) => {
+  if (schemaFieldValue.enum) {
+    // check if it's valid enum or not
+    vaildateEnum(schemaFieldValue, schemaField);
+    if (
+      isRequired(schemaFieldValue) &&
+      typeof schemaFieldValue.default !== 'undefined'
+    ) {
+      // has default → first check the default then match the default to the the field
+    }
+  }
+};
 
 module.exports = {
   checkForPremitiveValues,
@@ -50,5 +73,5 @@ module.exports = {
   checkForCriteriaObject,
   isRequired,
   isEmail,
-  checkEnum
+  checkEnum,
 };
