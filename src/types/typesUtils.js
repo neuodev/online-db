@@ -13,7 +13,16 @@ const checkForObjectType = schemaFieldValue => {
   );
 };
 
+const checkForCriteriaObject = schemaFieldValue => {
+  return (
+    schemaFieldValue instanceof Object &&
+    typeof schemaField !== 'function' &&
+    schemaFieldValue.type 
+  );
+};
+
 module.exports = {
   checkForPremitiveValues,
   checkForObjectType,
+  checkForCriteriaObject,
 };

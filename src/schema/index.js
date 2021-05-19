@@ -3,6 +3,7 @@ const { throwError } = require('../utils/utils');
 const {
   checkForPremitiveValues,
   checkForObjectType,
+  checkForCriteriaObject,
 } = require('../types/typesUtils');
 module.exports = class Schema {
   constructor(schemaFields) {
@@ -32,6 +33,8 @@ module.exports = class Schema {
             );
           }
         }
+      } else if (checkForCriteriaObject(schemaFieldValue)) {
+        console.log('I am here', schemaFieldValue);
       } else if (checkForPremitiveValues(schemaFieldValue, dataFieldValue)) {
         throwError(
           ` Field "${schemaField}" expected type of ${typeof schemaFieldValue()} but get type of ${typeof dataFieldValue} `
