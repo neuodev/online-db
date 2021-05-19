@@ -44,12 +44,14 @@ const isEmail = email => {
 
 const vaildateEnum = (schemaFieldValue, schemaField) => {
   if (!(schemaFieldValue.enum instanceof Array))
-    throwError(`Valid enums should be in a array in the  ${schemaField}`.bgRed);
+    throwError(
+      `Valid enums should be an array for the  ${schemaField} field`.bgRed
+    );
 
   for (let item of schemaFieldValue.enum) {
     if (typeof item !== typeof schemaFieldValue.type())
       throwError(
-        `Invalid Enum: enums for ${schemaField} field must have type of ${typeof schemaFieldValue.type()} but get type of ${typeof item} `
+        `Invalid Enum: enums for ${schemaField} field must have type of ${typeof schemaFieldValue.type()} but get type of ${typeof item} for item ${item}`
       );
   }
 };
