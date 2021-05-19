@@ -9,11 +9,6 @@ module.exports = class OnlineDB {
     initDB(dbName);
   }
 
-  _init() {
-    if (!this.dbName) throw new Error('DB name is required');
-    if (!fs.existsSync(`./${this.dbName}`)) fs.mkdirSync(`./${this.dbName}`);
-  }
-
   createCollection(docName, schema) {
     if (!docName) throw new Error('Document name is required');
     const docFile = `./${this.dbName}/${docName}.json`;
