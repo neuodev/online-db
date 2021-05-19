@@ -31,8 +31,10 @@ module.exports = class Schema {
         // this called the criteria object.
         // Example meta : { type: String, requried: true }
         const mainParams = [schemaFieldValue, dataFieldValue, schemaField];
+
         // check for `email` with type string
         emailCheck(...mainParams);
+
         // check for `regExp`
         regExpCheck(...mainParams);
         // check for `maxLength` and `minLength` properties
@@ -43,6 +45,7 @@ module.exports = class Schema {
 
         // check for the `enum` field
         checkEnum(...mainParams);
+        
         // need to pass the exist check if it's not required
         // if the field exist and its requried so need to validate
         // what if its exsit and not required need to check its type
