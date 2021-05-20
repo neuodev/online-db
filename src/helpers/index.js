@@ -22,3 +22,7 @@ module.exports.regExpCheck = (
       );
   }
 };
+
+module.exports.checkApplyBasicOperators = data => {
+  console.log(data);
+};
