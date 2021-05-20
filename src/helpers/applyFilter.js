@@ -1,15 +1,15 @@
 const colors = require('colors');
 const { checkApplyBasicOperators } = require('.');
 module.exports.applyFilter = (filters, data) => {
-  console.log(filters);
-  for (let filter in filters) {
-    let filterValue = filters[filter];
+  for (let field in filters) {
+    let filterValue = filters[field];
     if (filterValue instanceof Array) {
       console.log('Array'.bgWhite);
     } else if (filterValue instanceof Object) {
-      data = checkApplyBasicOperators(data);
-    } else if (typeof filters[filter] !== 'object') {
-      data = data.find(item => item[filter] == filters[filter]);
+      // check and apply the basic operator if they exist $gt, $gte, $lt, $lte
+      data = checkApplyBasicOperators(field, filterValue, data);
+    } else if (typeof filters[field] !== 'object') {
+      data = data.find(item => item[field] == filters[field]);
     }
   }
 };

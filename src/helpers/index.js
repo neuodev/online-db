@@ -23,6 +23,19 @@ module.exports.regExpCheck = (
   }
 };
 
-module.exports.checkApplyBasicOperators = data => {
+module.exports.checkApplyBasicOperators = (field, filterValue, data) => {
+  console.log(filterValue);
+  if (filterValue.$gt) {
+    data = data.filter(item => item[field] > filterValue.$gt);
+  } else if (filterValue.$gte) {
+    data = data.filter(item => item[field] >= filterValue.$gte);
+  }
+
+  if (filterValue.$lt) {
+    data = data.filter(item => item[field] < filterValue.$lt);
+  } else if (filterValue.$lte) {
+    data = data.filter(item => item[field] <= filterValue.$lte);
+  }
   console.log(data);
+  return data;
 };
