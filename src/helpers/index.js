@@ -24,7 +24,7 @@ module.exports.regExpCheck = (
 };
 
 module.exports.checkApplyBasicOperators = (field, filterValue, data) => {
-  console.log(filterValue);
+  if (!data) return;
   if (filterValue.$gt) {
     data = data.filter(item => item[field] > filterValue.$gt);
   } else if (filterValue.$gte) {
@@ -36,6 +36,21 @@ module.exports.checkApplyBasicOperators = (field, filterValue, data) => {
   } else if (filterValue.$lte) {
     data = data.filter(item => item[field] <= filterValue.$lte);
   }
-  console.log(data);
+
   return data;
+};
+
+// To combare nisted values
+module.exports.checkDeepEquality = (filter, item, filterValue) => {
+  let fieldArray = filter.split('.');
+  console.log(fieldArray);
+  let targetField = item;
+  for (let subField of fieldArray) {
+    targetField = targetField[subField];
+  }
+
+  if (typeof targetField !== 'undefined' && targetField === filterValue)
+    return true;
+
+  return false;
 };

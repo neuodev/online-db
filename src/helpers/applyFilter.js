@@ -1,5 +1,5 @@
 const colors = require('colors');
-const { checkApplyBasicOperators } = require('.');
+const { checkApplyBasicOperators, checkDeepEquality } = require('.');
 module.exports.applyFilter = (filters, data) => {
   for (let field in filters) {
     let filterValue = filters[field];
@@ -9,7 +9,9 @@ module.exports.applyFilter = (filters, data) => {
       // check and apply the basic operator if they exist $gt, $gte, $lt, $lte
       data = checkApplyBasicOperators(field, filterValue, data);
     } else if (typeof filters[field] !== 'object') {
-      data = data.find(item => item[field] == filters[field]);
+      data = data.filter(item => checkDeepEquality(field, item, filterValue));
     }
+
+    return data;
   }
 };
