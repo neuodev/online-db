@@ -40,10 +40,10 @@ module.exports = class Collection {
   insertMany(dataArr) {
     if (!isDocExist(this.collectionPath)) docNotFoundError();
     if (!(dataArr instanceof Array))
-      throw new Error('Method only accept array of items');
+      throw new Error(' insertMany only accept array of items');
 
     for (let item of dataArr) {
-      this.insertOne(item).save();
+      this.insertOne(item);
     }
   }
 
