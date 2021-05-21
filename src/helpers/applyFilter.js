@@ -11,7 +11,7 @@ const {
 const { throwError } = require('../utils/utils');
 module.exports.applyFilter = (filters, data) => {
   for (let field in filters) {
-    if (field === 'select') continue;
+    if (field === 'select' || field === 'populate') continue;
     let filterValue = filters[field];
 
     if (filterValue instanceof Array) {

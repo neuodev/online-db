@@ -13,16 +13,16 @@ const { valueCheck } = require('../helpers/valueCheck');
 const { emailCheck, regExpCheck } = require('../helpers');
 
 module.exports = class Schema {
-  constructor(schemaFields, collectionPath) {
+  constructor(schemaFields, database, collectionName) {
     this.schema = schemaFields;
-    this.path = collectionPath;
+    this.database = database;
+    this.collectionName = collectionName;
   }
 
   validateDataAganistSchema(data) {
     for (let schemaField in this.schema) {
       const schemaFieldValue = this.schema[schemaField];
       const dataFieldValue = data[schemaField];
-      console.log(schemaFieldValue);
       if (schemaFieldValue.type === 'ObjectId') {
         // check if he provide a ref
         if (!schemaFieldValue.ref)

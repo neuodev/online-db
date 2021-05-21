@@ -1,3 +1,4 @@
+const fs = require('fs');
 const Save = require('./Save');
 const limit = require('../helpers/limit');
 const { skip } = require('../helpers/skip');
@@ -12,6 +13,7 @@ const {
 } = require('../utils/utils');
 const { applyFilter } = require('../helpers/applyFilter');
 const { selectionInvalidType } = require('../errors/collectionErrors');
+const { checkApplyRelation } = require('../relation');
 module.exports = class Collection {
   constructor(docName, dbName, schema) {
     this.docName = docName;
@@ -95,6 +97,10 @@ module.exports = class Collection {
 
       return selectedData;
     }
+
+    // populate data
+    data = checkApplyRelation(filter, this.dbName, this.schema, data);
+
     return data;
   }
 
