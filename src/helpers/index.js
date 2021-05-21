@@ -54,3 +54,20 @@ module.exports.checkDeepEquality = (filter, item, filterValue) => {
 
   return false;
 };
+
+module.exports.checkNotOperators = (field, filterValue, item) => {
+  for (let filedsNotToHave of filterValue.$not) {
+    if (filedsNotToHave === item[field]) return false;
+  }
+
+  return true;
+};
+
+module.exports.checkApplyNotOperator = (field, filterValue, data) => {
+  if (filterValue.$not) {
+    data = data.filter(item =>
+      this.checkNotOperators(field, filterValue, item)
+    );
+  }
+  return data;
+};
