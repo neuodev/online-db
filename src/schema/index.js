@@ -5,16 +5,17 @@ const {
   isObjectType,
   checkForCriteriaObject,
   isRequired,
-  isEmail,
   checkEnum,
 } = require('../types/typesUtils');
 
 const { lengthCheck } = require('../helpers/lengthCheck');
 const { valueCheck } = require('../helpers/valueCheck');
 const { emailCheck, regExpCheck } = require('../helpers');
+
 module.exports = class Schema {
-  constructor(schemaFields) {
+  constructor(schemaFields, collectionPath) {
     this.schema = schemaFields;
+    this.path = collectionPath;
   }
 
   validateDataAganistSchema(data) {
@@ -29,7 +30,6 @@ module.exports = class Schema {
             `"${schemaField}" filed need to poin to another coolection, need to add ther "ref" properity`
               .red
           );
-        // make sure that this collection exist
       } else if (schemaFieldValue instanceof Array) {
         checkArrayType(dataFieldValue, schemaField, schemaFieldValue);
       } else if (isObjectType(schemaFieldValue)) {
