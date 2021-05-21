@@ -135,8 +135,12 @@ module.exports.checkApplyOrOperator = (field, filterValue, data) => {
     }
 
     if (data.length !== 0) return data;
-    else data = dataCopy
+    else data = dataCopy;
   }
 
   return data;
+};
+
+module.exports.checkApplyAllOperator = () => {
+  
 };

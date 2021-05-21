@@ -30,6 +30,7 @@ module.exports.applyFilter = (filters, data) => {
       data = data.filter(item => checkDeepEquality(field, item, filterValue));
     }
   }
-  console.log('data'.bgCyan, data);
   return data;
 };
+
+

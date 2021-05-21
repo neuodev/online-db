@@ -56,7 +56,7 @@ module.exports = class Collection {
     // read the file
     let data = getDataJson(this.collectionPath);
     // apply filters
-    applyFilter(filter, data);
+    data = applyFilter(filter, data);
     if (filter && filter.skip) data = skip(data, filter.skip);
 
     if (filter && filter.limit) data = limit(filter.limit, data);
