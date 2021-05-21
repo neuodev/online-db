@@ -11,7 +11,7 @@ module.exports.applyFilter = (filters, data) => {
     } else if (typeof filters[field] !== 'object') {
       data = data.filter(item => checkDeepEquality(field, item, filterValue));
     }
-
-    return data;
   }
+  console.log(data);
+  return data;
 };

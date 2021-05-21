@@ -43,7 +43,7 @@ module.exports.checkApplyBasicOperators = (field, filterValue, data) => {
 // To combare nisted values
 module.exports.checkDeepEquality = (filter, item, filterValue) => {
   let fieldArray = filter.split('.');
-  console.log(fieldArray);
+
   let targetField = item;
   for (let subField of fieldArray) {
     targetField = targetField[subField];
