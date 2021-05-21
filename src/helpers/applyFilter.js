@@ -11,13 +11,8 @@ module.exports.applyFilter = (filters, data) => {
   for (let field in filters) {
     let filterValue = filters[field];
 
-    if (field === '$and') {
-      if (!(filterValue instanceof Array))
-        throwError(
-          `$and operator should have an array of expreations but got an ${typeof filterValue}`
-        );
+    if (filterValue instanceof Array) {
       data = applyAndOperator(filterValue, data);
-    } else if (filterValue instanceof Array) {
       console.log('Array'.bgWhite);
       const params = [field, filterValue, data];
       data = checkApplyNotOperator(...params);
