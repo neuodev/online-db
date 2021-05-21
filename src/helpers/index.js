@@ -71,3 +71,19 @@ module.exports.checkApplyNotOperator = (field, filterValue, data) => {
   }
   return data;
 };
+
+module.exports.applyAndOperator = (filterValue, data) => {
+  for (let expression in filterValue) {
+    const expressionValue = filterValue[expression];
+    for (let field in expressionValue) {
+      const filedValue = expressionValue[field];
+      data = this.checkApplyBasicOperators(field, filedValue, data);
+
+      if (typeof filedValue !== 'object') {
+        data = data.filter(doc => doc[field] === filedValue);
+      }
+    }
+  }
+
+  return data;
+};
