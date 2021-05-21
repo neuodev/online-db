@@ -62,7 +62,6 @@ module.exports = class Collection {
 
     if (filter && filter.limit) data = limit(filter.limit, data);
     // check for selection
-
     if (typeof filter.select !== 'undefined') {
       selectionInvalidType(filter.select);
       let selectedData = [];
@@ -73,8 +72,19 @@ module.exports = class Collection {
       for (let document of data) {
         let newDocument = {};
         for (let selectedField of fieldsToSelect) {
-          if (document[selectedField]) {
-            newDocument[selectedField] = document[selectedField];
+          let correctSelectedField = selectedField.startsWith('-')
+            ? selectedField.slice(1)
+            : selectedField;
+
+          if (!selectedField.startsWith('-')) {
+            if (document[correctSelectedField]) {
+              newDocument[correctSelectedField] =
+                document[correctSelectedField];
+            }
+          } else {
+            delete document[correctSelectedField];
+
+            newDocument = { ...document };
           }
         }
 
