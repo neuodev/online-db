@@ -21,8 +21,16 @@ module.exports = class Schema {
     for (let schemaField in this.schema) {
       const schemaFieldValue = this.schema[schemaField];
       const dataFieldValue = data[schemaField];
-
-      if (schemaFieldValue instanceof Array) {
+      console.log(schemaFieldValue);
+      if (schemaFieldValue.type === 'ObjectId') {
+        // check if he provide a ref
+        if (!schemaFieldValue.ref)
+          throwError(
+            `"${schemaField}" filed need to poin to another coolection, need to add ther "ref" properity`
+              .red
+          );
+        // make sure that this collection exist
+      } else if (schemaFieldValue instanceof Array) {
         checkArrayType(dataFieldValue, schemaField, schemaFieldValue);
       } else if (isObjectType(schemaFieldValue)) {
         // there this thow coditions one -> item of object
@@ -45,7 +53,7 @@ module.exports = class Schema {
 
         // check for the `enum` field
         checkEnum(...mainParams);
-        
+
         // need to pass the exist check if it's not required
         // if the field exist and its requried so need to validate
         // what if its exsit and not required need to check its type

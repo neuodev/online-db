@@ -30,11 +30,11 @@ module.exports = class Collection {
     if (!isDocExist(collectionPath)) docNotFoundError();
     const collection = getDataJson(collectionPath);
 
-    this.schema.validateDataAganistSchema(data);
-
     if (!data.id) {
       data.id = v4();
     }
+    this.schema.validateDataAganistSchema(data);
+
     collection.push(data);
     writeData(collection, collectionPath);
     return data;
