@@ -39,6 +39,22 @@ module.exports.checkApplyBasicOperators = (field, filterValue, data) => {
 
   return data;
 };
+module.exports.checkApplyBasicOperatorsReverse = (field, filterValue, data) => {
+  if (!data) return;
+  if (filterValue.$gt) {
+    data = data.filter(item => item[field] < filterValue.$gt);
+  } else if (filterValue.$gte) {
+    data = data.filter(item => item[field] <= filterValue.$gte);
+  }
+
+  if (filterValue.$lt) {
+    data = data.filter(item => item[field] > filterValue.$lt);
+  } else if (filterValue.$lte) {
+    data = data.filter(item => item[field] >= filterValue.$lte);
+  }
+
+  return data;
+};
 
 // To combare nisted values
 module.exports.checkDeepEquality = (filter, item, filterValue) => {
@@ -81,6 +97,23 @@ module.exports.applyAndOperator = (filterValue, data) => {
 
       if (typeof filedValue !== 'object') {
         data = data.filter(doc => doc[field] === filedValue);
+      }
+    }
+  }
+
+  return data;
+};
+
+module.exports.checkApplyNorOperator = (field, filterValue, data) => {
+  if (field !== '$nor') return data;
+  for (let expression in filterValue) {
+    const expressionValue = filterValue[expression];
+    for (let field in expressionValue) {
+      const filedValue = expressionValue[field];
+      data = this.checkApplyBasicOperatorsReverse(field, filedValue, data);
+
+      if (typeof filedValue !== 'object') {
+        data = data.filter(doc => doc[field] !== filedValue);
       }
     }
   }
