@@ -26,6 +26,20 @@ function writeData(data, collectionPath) {
   fs.writeFileSync(collectionPath, JSON.stringify(data));
 }
 
+// ['age']
+function checkSeclect(selectArray) {
+  let isSelect = !selectArray[0].startsWith('-') ? true : false;
+  let currentState = isSelect;
+
+  for (let field of selectArray) {
+    if (
+      (isSelect && field.startsWith('-')) ||
+      (!isSelect && !field.startsWith('-'))
+    )
+      throwError('"Select" can only select on remove value  '.red);
+  }
+}
+
 module.exports = {
   isDocExist,
   docNotFoundError,
@@ -33,4 +47,5 @@ module.exports = {
   getDataJson,
   writeData,
   initDB,
+  checkSeclect,
 };

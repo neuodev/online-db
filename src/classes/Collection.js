@@ -8,6 +8,7 @@ const {
   docNotFoundError,
   throwError,
   writeData,
+  checkSeclect,
 } = require('../utils/utils');
 const { applyFilter } = require('../helpers/applyFilter');
 const { selectionInvalidType } = require('../errors/collectionErrors');
@@ -69,6 +70,7 @@ module.exports = class Collection {
         throwError('Please add selected fileds ');
       }
       const fieldsToSelect = filter.select.split(' ');
+      checkSeclect(fieldsToSelect);
       for (let document of data) {
         let newDocument = {};
         for (let selectedField of fieldsToSelect) {
