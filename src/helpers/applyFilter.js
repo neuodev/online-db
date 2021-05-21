@@ -5,6 +5,7 @@ const {
   checkApplyNotOperator,
   applyAndOperator,
   checkApplyNorOperator,
+  checkApplyOrOperator,
 } = require('.');
 const { throwError } = require('../utils/utils');
 module.exports.applyFilter = (filters, data) => {
@@ -12,17 +13,19 @@ module.exports.applyFilter = (filters, data) => {
     let filterValue = filters[field];
 
     if (filterValue instanceof Array) {
-      data = applyAndOperator(filterValue, data);
-      console.log('Array'.bgWhite);
       const params = [field, filterValue, data];
+      // check and apply the and operator
+      data = applyAndOperator(filterValue, data);
+      // check for logic operator $not
       data = checkApplyNotOperator(...params);
       // check for logic operator $nor
       data = checkApplyNorOperator(...params);
+      // check for logic operator $or
+      data = checkApplyOrOperator(...params);
     } else if (filterValue instanceof Object) {
       const params = [field, filterValue, data];
       // check and apply the basic operator if they exist $gt, $gte, $lt, $lte
       data = checkApplyBasicOperators(...params);
-      // check for logic operator $not
     } else if (typeof filters[field] !== 'object') {
       data = data.filter(item => checkDeepEquality(field, item, filterValue));
     }

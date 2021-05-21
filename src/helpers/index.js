@@ -120,3 +120,23 @@ module.exports.checkApplyNorOperator = (field, filterValue, data) => {
 
   return data;
 };
+
+module.exports.checkApplyOrOperator = (field, filterValue, data) => {
+  if (field !== '$or') return data;
+  let dataCopy = [...data];
+  for (let expression in filterValue) {
+    const expressionValue = filterValue[expression];
+    for (let field in expressionValue) {
+      const filedValue = expressionValue[field];
+      data = this.checkApplyBasicOperators(field, filedValue, data);
+      if (typeof filedValue !== 'object') {
+        data = data.filter(doc => doc[field] === filedValue);
+      }
+    }
+
+    if (data.length !== 0) return data;
+    else data = dataCopy
+  }
+
+  return data;
+};
