@@ -141,6 +141,45 @@ module.exports.checkApplyOrOperator = (field, filterValue, data) => {
   return data;
 };
 
-module.exports.checkApplyAllOperator = () => {
-  
+module.exports.checkApplyAllOperator = () => {};
+
+module.exports.applySorting = (filters, data) => {
+  const fieldsToSortBy = filters.sort.split(' ');
+  let currentSortedField = fieldsToSortBy[0];
+
+  let currentField = currentSortedField.startsWith('-')
+    ? currentSortedField.slice(1)
+    : currentSortedField;
+  // sort by chars
+  // sort by nesting field
+  // accept many values
+  if (typeof data[0][currentField] === 'number') {
+    data = data.sort((a, b) => {
+      if (!currentSortedField.startsWith('-')) {
+        return a[currentField] - b[currentField];
+      } else {
+        return b[currentField] - a[currentField];
+      }
+    });
+  }
+  if (typeof data[0][currentField] === 'string') {
+    data = data.sort((a, b) => {
+      console.log(currentSortedField, currentField);
+      if (
+        !currentSortedField.startsWith('-') &&
+        a[currentField] < b[currentField]
+      ) {
+        return -1;
+      }
+      if (
+        a[currentField] > b[currentField] &&
+        currentSortedField.startsWith('-')
+      ) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
+  return data;
 };

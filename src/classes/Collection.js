@@ -10,6 +10,7 @@ const {
   writeData,
 } = require('../utils/utils');
 const { applyFilter } = require('../helpers/applyFilter');
+const { selectionInvalidType } = require('../errors/collectionErrors');
 module.exports = class Collection {
   constructor(docName, dbName, schema) {
     this.docName = docName;
@@ -60,7 +61,28 @@ module.exports = class Collection {
     if (filter && filter.skip) data = skip(data, filter.skip);
 
     if (filter && filter.limit) data = limit(filter.limit, data);
+    // check for selection
 
+    if (typeof filter.select !== 'undefined') {
+      selectionInvalidType(filter.select);
+      let selectedData = [];
+      if (filter.select.length === 0) {
+        throwError('Please add selected fileds ');
+      }
+      const fieldsToSelect = filter.select.split(' ');
+      for (let document of data) {
+        let newDocument = {};
+        for (let selectedField of fieldsToSelect) {
+          if (document[selectedField]) {
+            newDocument[selectedField] = document[selectedField];
+          }
+        }
+
+        selectedData.push(newDocument);
+      }
+
+      return selectedData;
+    }
     return data;
   }
 
