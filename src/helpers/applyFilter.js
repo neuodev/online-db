@@ -27,10 +27,32 @@ module.exports.applyFilter = (filters, data) => {
       // check and apply the basic operator if they exist $gt, $gte, $lt, $lte
       data = checkApplyBasicOperators(...params);
     } else if (typeof filters[field] !== 'object') {
+      if (field === 'sort') continue;
       data = data.filter(item => checkDeepEquality(field, item, filterValue));
     }
   }
+  if (typeof filters.sort !== 'undefined') {
+    const fieldsToSortBy = filters.sort.split(' ');
+    let currentSortedField = fieldsToSortBy[0]
+   
+    let currentField = currentSortedField.startsWith('-')
+      ? currentSortedField.slice(1)
+      : currentSortedField;
+    console.log(currentField);
+    // sort by number
+    if (typeof data[0][currentField] === 'number') {
+      data = data.sort((a, b) => {
+        if (!currentSortedField.startsWith('-')) {
+          return a[currentField] - b[currentField];
+        } else {
+          return b[currentField] - a[currentField];
+        }
+      });
+    }
+    // sort by chars
+    // sort by nesting field
+    // accept many values
+  }
+  console.log(data);
   return data;
 };
-
-
