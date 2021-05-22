@@ -91,16 +91,20 @@ module.exports = class Collection {
   }
 
   //   find one document
-  findOne(citeria) {
-    if (!(citeria instanceof Object)) throwError('Expected object');
-    const documents = getDataJson(this.collectionPath);
-    const keys = Object.keys(citeria);
-    // @todo add an utild to do this for all citerias
-    const document = documents.find(
-      document => document[keys[0]] === citeria[keys[0]]
-    );
+  findOne(filter) {
+    if (!(filter instanceof Object)) throwError('Expected object');
+    const collection = getDataJson(this.collectionPath);
+    // apply filters
+    let data = applyFilter(filter, collection);
+    // check for selection
+    if (typeof filter.select !== 'undefined') {
+      data = applySelection(filter.select, data);
+    }
 
-    return document;
+    // populate data
+    data = checkApplyRelation(filter, this.dbName, this.schema, data);
+
+    return data[0];
   }
   // Find one document and update it
   // @return the updated document
@@ -127,20 +131,20 @@ module.exports = class Collection {
     if (!(updates instanceof Object))
       throwError('Expected updates to be an object');
 
-    const filterKeys = Object.keys(filter);
-    const documents = getDataJson(this.collectionPath);
+    const collection = getDataJson(this.collectionPath);
 
-    const documentIdx = documents.findIndex(
-      document => document[filterKeys[0]] === filter[filterKeys[0]]
-    );
+    // apply filters
+    let data = applyFilter(filter, collection);
+    if (data.length === 0) throwError('Document not found');
 
-    if (documentIdx === -1) throwError('Document not found');
-    documents[documentIdx] = {
-      ...documents[documentIdx],
-      ...updates,
-    };
-    documents[documentIdx].updatedAt = new Date();
-    writeData(documents, this.collectionPath);
+    for (let fieldToUpdate in updates) {
+      let filedToUpdateValue = updates[fieldToUpdate];
+
+      let document = data[0];
+      document[fieldToUpdate] = filedToUpdateValue;
+    }
+    data[0].updatedAt = new Date();
+    writeData(collection, this.collectionPath);
   }
   // Delete one by id
   deleteOneById(id) {
