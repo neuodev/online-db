@@ -14,6 +14,7 @@ const {
 const { applyFilter } = require('../helpers/applyFilter');
 const { selectionInvalidType } = require('../errors/collectionErrors');
 const { checkApplyRelation } = require('../relation');
+const { applySelection } = require('../helpers');
 module.exports = class Collection {
   constructor(docName, dbName, schema) {
     this.docName = docName;
@@ -66,36 +67,7 @@ module.exports = class Collection {
     if (filter && filter.limit) data = limit(filter.limit, data);
     // check for selection
     if (typeof filter.select !== 'undefined') {
-      selectionInvalidType(filter.select);
-      let selectedData = [];
-      if (filter.select.length === 0) {
-        throwError('Please add selected fileds ');
-      }
-      const fieldsToSelect = filter.select.split(' ');
-      checkSeclect(fieldsToSelect);
-      for (let document of data) {
-        let newDocument = {};
-        for (let selectedField of fieldsToSelect) {
-          let correctSelectedField = selectedField.startsWith('-')
-            ? selectedField.slice(1)
-            : selectedField;
-
-          if (!selectedField.startsWith('-')) {
-            if (document[correctSelectedField]) {
-              newDocument[correctSelectedField] =
-                document[correctSelectedField];
-            }
-          } else {
-            delete document[correctSelectedField];
-
-            newDocument = { ...document };
-          }
-        }
-
-        selectedData.push(newDocument);
-      }
-
-      return selectedData;
+      data = applySelection(filter, data);
     }
 
     // populate data

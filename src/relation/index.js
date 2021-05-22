@@ -8,42 +8,46 @@ module.exports.checkApplyRelation = (
   schema,
   firstCollection
 ) => {
-  if (filter.populate) {
-    let schemaField = schema.schema[filter.populate];
-    if (
-      typeof filter.populate === 'string' &&
-      !(schemaField instanceof Array)
-    ) {
-      return oneToOneRelation(filter, dbName, schema, firstCollection);
-    } else if (
-      typeof filter.populate === 'string' &&
-      schemaField instanceof Array
-    ) {
-      return oneToManyRelation(filter, dbName, schema, firstCollection);
-    } else if (filter.populate instanceof Object) {
+  if (!filter.populate) return firstCollection;
+  let schemaField = schema.schema[filter.populate];
+  if (!(schemaField instanceof Array)) {
+    let field;
+    if (typeof filter.populate === 'string') {
+      field = filter.populate;
+    } else {
+      field = filter.populate.field;
     }
+
+    //   get populated data
+    let data = oneToOneRelation(field, dbName, schema, firstCollection);
+    // return if there is any selection
+    if (typeof filter.populate === 'string') return data;
+
+    return data;
+  } else if (
+    typeof filter.populate === 'string' &&
+    schemaField instanceof Array
+  ) {
+    return oneToManyRelation(filter, dbName, schema, firstCollection);
+  } else if (filter.populate instanceof Object) {
   }
 };
 
-function oneToOneRelation(filter, dbName, schema, firstCollection) {
-  if (!schema.schema[filter.populate]) {
-    throwError(`Schema don't have any ref for "${filter.populate}"`.bgRed);
+function oneToOneRelation(field, dbName, schema, firstCollection) {
+  if (!schema.schema[field]) {
+    throwError(`Schema don't have any ref for "${field}"`.bgRed);
   }
 
-  let secondCollectionPath = `./${dbName}/${
-    schema.schema[filter.populate].ref
-  }.json`;
+  let secondCollectionPath = `./${dbName}/${schema.schema[field].ref}.json`;
   if (!fs.existsSync(secondCollectionPath))
-    throwError(`"${filter.populate}" collection doesn't exist `.bgRed);
+    throwError(`"${field}" collection doesn't exist `.bgRed);
   // read the second collection
   const secondCollection = getDataJson(secondCollectionPath);
 
   let finalData = [];
 
   for (let document of firstCollection) {
-    document[filter.populate] = secondCollection.find(
-      item => item.id == document[filter.populate]
-    );
+    document[field] = secondCollection.find(item => item.id == document[field]);
 
     finalData.push(document);
   }
