@@ -2,7 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const { v4 } = require('uuid');
 const Collection = require('./classes/Collection');
-const { initDB, printCollections, printDB, dropDB } = require('./utils/utils');
+const {
+  initDB,
+  printCollections,
+  printDB,
+  dropDB,
+  removeCollection,
+} = require('./utils/utils');
 module.exports = class OnlineDB {
   constructor(dbName) {
     this.dbName = dbName.toLowerCase();
@@ -21,13 +27,17 @@ module.exports = class OnlineDB {
 };
 
 if (process.argv[2] === 'showdb') {
-  printDB()
+  printDB();
 }
 
 if (process.argv[2] === 'showCol') {
-  printCollections()
+  printCollections();
 }
 
-if(process.argv[2] === 'drop'){
-  dropDB()
+if (process.argv[2] === 'drop') {
+  dropDB();
+}
+
+if (process.argv[2] === 'remove') {
+  removeCollection();
 }

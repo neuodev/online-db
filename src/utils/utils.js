@@ -1,5 +1,11 @@
 const fs = require('fs');
 const readline = require('readline');
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
 function initDB(dbName) {
   if (!dbName) throw new Error('DB name is required');
   if (!fs.existsSync('./OnlineDB')) fs.mkdirSync('./OnlineDB');
@@ -89,23 +95,67 @@ function dropDB() {
   const PATH = `./OnlineDB/${db}`;
   if (!fs.existsSync(PATH))
     return console.log(` "${db}" Doesn't exist `.bgBlue);
-  // ask for confirm
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
 
   // remove it
-  rl.question('Are You Sure?[y/n] ', function (answer) {
-    if (answer.toLocaleLowerCase() === 'y') {
-      fs.rmdirSync(PATH, { recursive: true });
-      console.log(`"${db}" Database deleted`.bgCyan);
+  rl.question(
+    'Are You Sure ( this operation is permanent )?[y/n] ',
+    function (answer) {
+      if (answer.toLocaleLowerCase() === 'y') {
+        fs.rmdirSync(PATH, { recursive: true });
+        console.log(`"${db}" Database deleted`.bgCyan);
+      }
+      rl.close();
     }
-    rl.close();
-  });
+  );
 
   rl.on('close', function () {
-    console.log('\nBYE BYE !!!'.bgCyan);
+    console.log('BYE BYE !!!'.bgCyan);
+    process.exit(0);
+  });
+}
+
+function removeCollection() {
+  if (!process.argv[3] || !process.argv[4]) {
+    console.log(
+      'Missing argument -> remove <database name> <collection name> '.bold
+    );
+    process.exit(0);
+  }
+
+  const dbName = process.argv[3];
+  const collectionName = process.argv[4];
+
+  // check if the db exist
+  if (!fs.existsSync(`./OnlineDB/${dbName}`)) {
+    console.log(`"${dbName}" isn't exist`);
+    process.exit(0);
+  }
+  // check if the collection exist
+  const PATH = `./OnlineDB/${dbName}/${collectionName}.json`;
+
+  if (!fs.existsSync(PATH)) {
+    console.log(
+      ` "${collectionName}" doesn't exist on the "${dbName}" database `.bgBlue
+    );
+    process.exit(0);
+  }
+
+  // confirm
+  // remove it
+  rl.question(
+    'Are You Sure ( this operation is permanent )?[y/n] ',
+    function (answer) {
+      if (answer.toLocaleLowerCase() === 'y') {
+        // delete the document
+        fs.rmdirSync(PATH, { recursive: true });
+        console.log(`"${collectionName}" collection deleted`.bgCyan);
+      }
+      rl.close();
+    }
+  );
+
+  rl.on('close', function () {
+    console.log('BYE BYE !!!'.bgCyan);
     process.exit(0);
   });
 }
@@ -122,4 +172,5 @@ module.exports = {
   printDB,
   printCollections,
   dropDB,
+  removeCollection,
 };
