@@ -160,6 +160,27 @@ function removeCollection() {
   });
 }
 
+function clearDB() {
+  const PATH = './OnlineDB';
+  // check if there is any dbs
+  if (!fs.existsSync(PATH)) {
+    console.log(`You don't have any databases yet.`.bgCyan);
+    process.exit(0);
+  }
+  // confirm
+  rl.question(
+    'Are You Sure ( this operation is permanent )?[y/n] ',
+    function (answer) {
+      if (answer.toLocaleLowerCase() === 'y') {
+        // delete 
+        fs.rmdirSync(PATH, { recursive: true });
+        console.log(`All databases are delted now`.bgCyan);
+      }
+      rl.close();
+    }
+  );
+}
+
 module.exports = {
   isDocExist,
   docNotFoundError,
@@ -173,4 +194,5 @@ module.exports = {
   printCollections,
   dropDB,
   removeCollection,
+  clearDB,
 };

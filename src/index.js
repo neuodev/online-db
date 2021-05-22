@@ -8,6 +8,7 @@ const {
   printDB,
   dropDB,
   removeCollection,
+  clearDB,
 } = require('./utils/utils');
 module.exports = class OnlineDB {
   constructor(dbName) {
@@ -40,4 +41,8 @@ if (process.argv[2] === 'drop') {
 
 if (process.argv[2] === 'remove') {
   removeCollection();
+}
+
+if (process.argv[2] == 'clear') {
+  clearDB();
 }
