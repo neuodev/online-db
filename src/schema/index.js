@@ -84,7 +84,7 @@ module.exports = class Schema {
           typeof dataFieldValue === 'undefined'
         ) {
           if (typeof schemaFieldValue.default === 'undefined') {
-            throwError(`${schemaField} field is required`);
+            throwError(`"${schemaField}" field is required`.bgRed);
           } else {
             data[schemaField] = schemaFieldValue.default;
           }
