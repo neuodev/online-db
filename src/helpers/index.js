@@ -308,7 +308,7 @@ module.exports.checkApplyUnique = (
   dbName,
   collection
 ) => {
-  if (!schemaFieldValue.unique) return;
+  if (typeof schemaFieldValue.unique !== 'boolean') return;
   const PATH = `./${dbName}/${collection}.json`;
   if (!fs.existsSync(PATH))
     throwError(
@@ -320,6 +320,9 @@ module.exports.checkApplyUnique = (
     document => document[schemaField] === dataFieldValue
   );
 
-  if (isExist === -1)
-    throwError(` "${schemaField}" field should be unique`.bgRed);
+  if (isExist !== -1)
+    throwError(
+      ` Document with the "${schemaField}" already has this value ( should be unique ), Dublicaiton error`
+        .bgRed
+    );
 };

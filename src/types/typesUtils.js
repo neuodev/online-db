@@ -30,7 +30,9 @@ const isRequired = schemaFieldValue => {
     schemaFieldValue.required &&
     typeof schemaFieldValue.required !== 'boolean'
   )
-    throwError(`required field can only be a boolean ( true or false )`.red.bold);
+    throwError(
+      `required field can only be a boolean ( true or false )`.red.bold
+    );
 
   return schemaFieldValue.required;
 };
@@ -66,9 +68,10 @@ const validateEnumAgainstField = (
   const schemaFieldType = typeof schemaFieldValue.type();
   const dataType = typeof field;
   // 1. check the type
-  if (!(schemaFieldType !== dataType) && isDefault) {
+  if (!(schemaFieldType == dataType) && isDefault) {
     throwError(
-      `Default value for ${schemaField} expected to be of type ${schemaFieldType} but get type of ${dataType}`.red.bold
+      `Default value for ${schemaField} expected to be of type ${schemaFieldType} but get type of ${dataType}`
+        .red.bold
     );
   }
   // 2. check the it is in the enums array
