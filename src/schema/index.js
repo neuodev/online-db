@@ -10,19 +10,18 @@ const {
 
 const { lengthCheck } = require('../helpers/lengthCheck');
 const { valueCheck } = require('../helpers/valueCheck');
-const { emailCheck, regExpCheck } = require('../helpers');
+const { emailCheck, regExpCheck, checkApplyUnique } = require('../helpers');
 
 module.exports = class Schema {
-  constructor(schemaFields, database, collectionName) {
+  constructor(schemaFields) {
     this.schema = schemaFields;
-    this.database = database;
-    this.collectionName = collectionName;
   }
 
-  validateDataAganistSchema(data) {
+  validateDataAganistSchema(data, database, collectionName) {
     for (let schemaField in this.schema) {
       const schemaFieldValue = this.schema[schemaField];
       const dataFieldValue = data[schemaField];
+
       if (schemaFieldValue.type === 'ObjectId') {
         // check if he provide a ref
         if (!schemaFieldValue.ref)
@@ -63,7 +62,8 @@ module.exports = class Schema {
 
         // check for the `enum` field
         checkEnum(...mainParams);
-
+        // check and apply unique properity
+        checkApplyUnique(...mainParams, database, collectionName);
         // need to pass the exist check if it's not required
         // if the field exist and its requried so need to validate
         // what if its exsit and not required need to check its type

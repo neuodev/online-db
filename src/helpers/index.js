@@ -1,7 +1,8 @@
-const { throwError } = require('../utils/utils');
+const { throwError, getDataJson } = require('../utils/utils');
 const { isEmail } = require('../types/typesUtils');
 const { selectionInvalidType } = require('../errors/collectionErrors');
 const { checkSeclect } = require('../utils/utils');
+const fs = require('fs');
 module.exports.emailCheck = (schemaFieldValue, dataFieldValue, schemaField) => {
   if (schemaFieldValue.isEmail && dataFieldValue) {
     if (!isEmail(dataFieldValue))
@@ -220,7 +221,7 @@ module.exports.applySelection = (select, data) => {
 
 module.exports.applySelectionRelation = (select, firstCollection, field) => {
   selectionInvalidType(select);
-  let selectedData = [];
+
   if (select.length === 0) {
     throwError('Please add selected fileds ');
   }
@@ -259,7 +260,6 @@ module.exports.applySelectionRelationMany = (
   field
 ) => {
   selectionInvalidType(select);
-  let selectedData = [];
   if (select.length === 0) {
     throwError('Please add selected fileds ');
   }
@@ -298,7 +298,28 @@ module.exports.applySelectionRelationMany = (
     firstDocument[field] = relatedDocArray;
   }
 
-  console.log(JSON.stringify(firstCollection));
-
   return firstCollection;
+};
+
+module.exports.checkApplyUnique = (
+  schemaFieldValue,
+  dataFieldValue,
+  schemaField,
+  dbName,
+  collection
+) => {
+  if (!schemaFieldValue.unique) return;
+  const PATH = `./${dbName}/${collection}.json`;
+  if (!fs.existsSync(PATH))
+    throwError(
+      ` "${collection}" doesn't exist on the "${dbName}" database  `.bgRed
+    );
+  const conllection = getDataJson(PATH);
+
+  const isExist = conllection.findIndex(
+    document => document[schemaField] === dataFieldValue
+  );
+
+  if (isExist === -1)
+    throwError(` "${schemaField}" field should be unique`.bgRed);
 };

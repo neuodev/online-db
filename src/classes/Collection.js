@@ -36,7 +36,7 @@ module.exports = class Collection {
     if (!data.id) {
       data.id = v4();
     }
-    this.schema.validateDataAganistSchema(data);
+    this.schema.validateDataAganistSchema(data, this.dbName, this.docName);
 
     collection.push(data);
     writeData(collection, collectionPath);
