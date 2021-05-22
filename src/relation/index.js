@@ -3,6 +3,7 @@ const colors = require('colors');
 const { getDataJson, throwError } = require('../utils/utils');
 const { getRelatedCollection } = require('../utils/utils');
 const { applySelectionRelation } = require('../helpers');
+const { invalidPopulateQuery } = require('../errors/relationErrors');
 module.exports.checkApplyRelation = (
   filter,
   dbName,
@@ -10,7 +11,12 @@ module.exports.checkApplyRelation = (
   firstCollection
 ) => {
   if (!filter.populate) return firstCollection;
-  let schemaField = schema.schema[filter.populate];
+  invalidPopulateQuery(filter.populate);
+  let populatedField =
+    filter.populate instanceof Object ? filter.populate.field : filter.populate;
+
+  let schemaField = schema.schema[populatedField];
+
   if (!(schemaField instanceof Array)) {
     let field;
     if (typeof filter.populate === 'string') {
@@ -18,7 +24,6 @@ module.exports.checkApplyRelation = (
     } else {
       field = filter.populate.field;
     }
-
     //   get populated data
     let data = oneToOneRelation(field, dbName, schema, firstCollection);
     // return if there is any selection
@@ -29,11 +34,12 @@ module.exports.checkApplyRelation = (
       data,
       filter.populate.field
     );
-  } else if (
-    typeof filter.populate === 'string' &&
-    schemaField instanceof Array
-  ) {
-    return oneToManyRelation(filter, dbName, schema, firstCollection);
+  } else if (schemaField instanceof Array) {
+    const field =
+      typeof filter.populate === 'string'
+        ? filter.populate
+        : filter.populate.field;
+    return oneToManyRelation(field, dbName, schema, firstCollection);
   } else if (filter.populate instanceof Object) {
   }
 };
@@ -59,13 +65,13 @@ function oneToOneRelation(field, dbName, schema, firstCollection) {
   return finalData;
 }
 
-function oneToManyRelation(filter, dbName, schema, firstCollection) {
+function oneToManyRelation(field, dbName, schema, firstCollection) {
   // check if it's exist and get the second collection
-  let secondCollectionName = schema.schema[filter.populate][0].ref;
+  let secondCollectionName = schema.schema[field][0].ref;
 
   const secondCollection = getRelatedCollection(dbName, secondCollectionName);
   for (let firstDocument of firstCollection) {
-    let fieldToPopulate = firstDocument[filter.populate];
+    let fieldToPopulate = firstDocument[field];
     let populateFieldValue = [];
     for (let item of fieldToPopulate) {
       let secondDocument = secondCollection.find(doc => doc.id === item);
@@ -73,7 +79,7 @@ function oneToManyRelation(filter, dbName, schema, firstCollection) {
       populateFieldValue.push(secondDocument);
     }
 
-    firstDocument[filter.populate] = populateFieldValue;
+    firstDocument[field] = populateFieldValue;
   }
   return firstCollection;
 }
