@@ -2,9 +2,10 @@ const fs = require('fs');
 
 function initDB(dbName) {
   if (!dbName) throw new Error('DB name is required');
-  if(!fs.existsSync('./OnlineDB')) fs.mkdirSync('./OnlineDB')
-  let validDBName = dbName.toLowerCase()
-  if (!fs.existsSync(`./OnlineDB/${validDBName}`)) fs.mkdirSync(`./OnlineDB/${validDBName}`);
+  if (!fs.existsSync('./OnlineDB')) fs.mkdirSync('./OnlineDB');
+  let validDBName = dbName.toLowerCase();
+  if (!fs.existsSync(`./OnlineDB/${validDBName}`))
+    fs.mkdirSync(`./OnlineDB/${validDBName}`);
 }
 function isDocExist(collectionPath) {
   return fs.existsSync(collectionPath);
@@ -52,6 +53,30 @@ function getRelatedCollection(dbName, collectionName) {
   return getDataJson(PATH);
 }
 
+function printDB() {
+  const database = fs.readdirSync('./OnlineDB');
+  console.log(database);
+}
+
+function printCollections() {
+  if (!process.argv[3])
+    return console.log('showCol should have a database name after it '.bgBlue);
+
+  // database name
+  const db = process.argv[3];
+  // check if the db exist
+  const PATH = `./OnlineDB/${db}`;
+  if (!fs.existsSync(PATH))
+    return console.log(` "${db}" database Doesn't exist `.bgBlue);
+  const files = fs.readdirSync(PATH);
+  let collections = [];
+
+  for (let file of files) {
+    collections.push(file.split('.')[0])
+  }
+  console.log(collections);
+}
+
 module.exports = {
   isDocExist,
   docNotFoundError,
@@ -61,4 +86,6 @@ module.exports = {
   initDB,
   checkSeclect,
   getRelatedCollection,
+  printDB,
+  printCollections,
 };

@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { v4 } = require('uuid');
 const Collection = require('./classes/Collection');
-const { initDB } = require('./utils/utils');
+const { initDB, printCollections, printDB } = require('./utils/utils');
 module.exports = class OnlineDB {
   constructor(dbName) {
     this.dbName = dbName.toLowerCase();
@@ -11,7 +11,7 @@ module.exports = class OnlineDB {
 
   createCollection(colName, schema) {
     if (!colName) throw new Error('Document name is required');
-    const validCollectionName = colName.toLowerCase()
+    const validCollectionName = colName.toLowerCase();
     const docFile = `./OnlineDB/${this.dbName}/${validCollectionName}.json`;
 
     if (!fs.existsSync(docFile)) fs.writeFileSync(docFile, JSON.stringify([]));
@@ -19,3 +19,11 @@ module.exports = class OnlineDB {
     return new Collection(validCollectionName, this.dbName, schema);
   }
 };
+
+if (process.argv[2] === 'showdb') {
+  printDB()
+}
+
+if (process.argv[2] === 'showCol') {
+  printCollections()
+}
