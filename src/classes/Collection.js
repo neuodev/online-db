@@ -165,21 +165,19 @@ module.exports = class Collection {
   deleteMany(filter) {
     if (!(filter instanceof Object))
       throwError('Filter should be type of object');
-    let documents = getDataJson(this.collectionPath);
+    let collection = getDataJson(this.collectionPath);
+    // apply filters
+    let data = applyFilter(filter, collection);
+    let newCollection = [];
 
-    const filterKeys = Object.keys(filter);
-    // check if the document exist
-    const idx = documents.findIndex(
-      document => document[filterKeys[0]] === filter[filterKeys[0]]
-    );
-    if (idx === -1) throwError("Document dont' found ");
+    for (let document of collection) {
+      // check if it is in the deleted documents
+      const idx = data.findIndex(doc => doc.id == document.id);
+      if (idx === -1) continue;
+      newCollection.push(document);
+    }
 
-    // delete the document
-    documents = documents.filter(
-      document => document[filterKeys[0]] !== filter[filterKeys[0]]
-    );
-
-    writeData(documents, this.collectionPath);
+    writeData(newCollection, this.collectionPath);
   }
 
   // Delete many documents with given filter
