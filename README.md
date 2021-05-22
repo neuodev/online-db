@@ -23,37 +23,43 @@ Fast, unopinionated, minimalist, open source, No-SQL database uses document data
 ## Advanced schema usage 
         const userSchema = new Schema({
             {
-            title: String, 
+
+           // <!-- this is sort hand for  { type: String } -->
+            title: String,  
             author: String,
             body: String,
+            // <!-- This how you define an array of items  -->
+            // <!-- Now you have an array of comments each comment should have and object with the body and the data and both of them are required  -->
             comments: [{ body: String, date: Date }],
-            hidden: Boolean,
+            // <!-- Hidden will be only true or false  -->
+            hidden: Boolean, 
+            // <!-- You can have as many nested levels as you want  -->
             meta: {
               votes: Number,
               favs: Number,
             },
-
+           // <!-- the age field will be of type number and it's equired. it has min and max vlaue  -->
             age: {
               type: Number,
               required: true,
               minValue: 25,
               maxValue: 100,
             },
-
+           // <!-- Text field will be of type string and it's equired. it has min and max lenths  -->
             text: {
               type: String,
               required: true,
-              default: 'false',
-              maxLength: 20,
-              minLength: 3,
+              default: 'Hello world text edition',
+              maxLength: 255,
+              minLength: 10,
             },
-
+            // <!-- Email field should be of type strig but not any string. It should match the provided regular expersion -->
             email: {
               type: String,
               regExp:
                 /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
             },
-
+          //  <!-- role field will be of type string but not any string it should be one of these three values and this is the defination of `enum` -->
             role: {
               type: String,
               enum: ['ADMIN', 'STAFF', 'USER'],
