@@ -67,7 +67,7 @@ module.exports = class Collection {
     if (filter && filter.limit) data = limit(filter.limit, data);
     // check for selection
     if (typeof filter.select !== 'undefined') {
-      data = applySelection(filter, data);
+      data = applySelection(filter.select, data);
     }
 
     // populate data

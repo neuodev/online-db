@@ -2,6 +2,7 @@ const fs = require('fs');
 const colors = require('colors');
 const { getDataJson, throwError } = require('../utils/utils');
 const { getRelatedCollection } = require('../utils/utils');
+const { applySelection } = require('../helpers');
 module.exports.checkApplyRelation = (
   filter,
   dbName,
@@ -22,7 +23,7 @@ module.exports.checkApplyRelation = (
     let data = oneToOneRelation(field, dbName, schema, firstCollection);
     // return if there is any selection
     if (typeof filter.populate === 'string') return data;
-
+    applySelection()
     return data;
   } else if (
     typeof filter.populate === 'string' &&

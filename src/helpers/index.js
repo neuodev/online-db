@@ -1,5 +1,7 @@
 const { throwError } = require('../utils/utils');
 const { isEmail } = require('../types/typesUtils');
+const { selectionInvalidType } = require('../errors/collectionErrors');
+const { checkSeclect } = require('../utils/utils');
 module.exports.emailCheck = (schemaFieldValue, dataFieldValue, schemaField) => {
   if (schemaFieldValue.isEmail && dataFieldValue) {
     if (!isEmail(dataFieldValue))
@@ -184,13 +186,13 @@ module.exports.applySorting = (filters, data) => {
   return data;
 };
 
-module.exports.applySelection = (filter , data) => {
-  selectionInvalidType(filter.select);
+module.exports.applySelection = (select, data) => {
+  selectionInvalidType(select);
   let selectedData = [];
-  if (filter.select.length === 0) {
+  if (select.length === 0) {
     throwError('Please add selected fileds ');
   }
-  const fieldsToSelect = filter.select.split(' ');
+  const fieldsToSelect = select.split(' ');
   checkSeclect(fieldsToSelect);
   for (let document of data) {
     let newDocument = {};
