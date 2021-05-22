@@ -30,6 +30,16 @@ module.exports = class Schema {
             `"${schemaField}" filed need to poin to another coolection, need to add ther "ref" properity`
               .red
           );
+      } else if (
+        schemaFieldValue instanceof Array &&
+        schemaFieldValue[0].type === 'ObjectId'
+      ) {
+        // Validate the first doc will have array of second doc
+        if (!(dataFieldValue instanceof Array))
+          throwError(
+            `Expected "${schemaField}" to be of type Array but get type of "${typeof dataFieldValue}"`
+              .bgRed
+          );
       } else if (schemaFieldValue instanceof Array) {
         checkArrayType(dataFieldValue, schemaField, schemaFieldValue);
       } else if (isObjectType(schemaFieldValue)) {

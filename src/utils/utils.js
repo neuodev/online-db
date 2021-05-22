@@ -40,6 +40,16 @@ function checkSeclect(selectArray) {
   }
 }
 
+function getRelatedCollection(dbName, collectionName) {
+  const PATH = `./${dbName}/${collectionName}`;
+
+  if (!fs.existsSync(PATH)) {
+    throwError(` "${collectionName}" Doesn't exist on your database `.bgRed);
+  }
+
+  return getDataJson(PATH);
+}
+
 module.exports = {
   isDocExist,
   docNotFoundError,
@@ -48,4 +58,5 @@ module.exports = {
   writeData,
   initDB,
   checkSeclect,
+  getRelatedCollection,
 };
