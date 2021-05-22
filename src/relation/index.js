@@ -2,7 +2,10 @@ const fs = require('fs');
 const colors = require('colors');
 const { getDataJson, throwError } = require('../utils/utils');
 const { getRelatedCollection } = require('../utils/utils');
-const { applySelectionRelation } = require('../helpers');
+const {
+  applySelectionRelation,
+  applySelectionRelationMany,
+} = require('../helpers');
 const { invalidPopulateQuery } = require('../errors/relationErrors');
 module.exports.checkApplyRelation = (
   filter,
@@ -39,7 +42,15 @@ module.exports.checkApplyRelation = (
       typeof filter.populate === 'string'
         ? filter.populate
         : filter.populate.field;
-    return oneToManyRelation(field, dbName, schema, firstCollection);
+    data = oneToManyRelation(field, dbName, schema, firstCollection);
+
+    if (typeof filter.populate === 'string' || !filter.populate.select)
+      return data;
+    return applySelectionRelationMany(
+      filter.populate.select,
+      data,
+      filter.populate.field
+    );
   } else if (filter.populate instanceof Object) {
   }
 };

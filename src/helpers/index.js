@@ -249,8 +249,56 @@ module.exports.applySelectionRelation = (select, firstCollection, field) => {
     }
 
     firstDocument[field] = newDocument[field];
-   
   }
+
+  return firstCollection;
+};
+module.exports.applySelectionRelationMany = (
+  select,
+  firstCollection,
+  field
+) => {
+  selectionInvalidType(select);
+  let selectedData = [];
+  if (select.length === 0) {
+    throwError('Please add selected fileds ');
+  }
+  const fieldsToSelect = select.split(' ');
+  checkSeclect(fieldsToSelect);
+
+  // one loop for the main document
+  for (let firstDocument of firstCollection) {
+    let newDocument = {
+      [field]: [],
+    };
+
+    let relatedDocArray = [];
+    // second loop for the sub document
+    for (let secondDoc of firstDocument[field]) {
+      // last one for the sub fields
+      let newSubDocument = {};
+      for (let selectedField of fieldsToSelect) {
+        let correctSelectedField = selectedField.startsWith('-')
+          ? selectedField.slice(1)
+          : selectedField;
+
+        if (!selectedField.startsWith('-')) {
+          if (secondDoc[correctSelectedField]) {
+            newSubDocument[correctSelectedField] =
+              secondDoc[correctSelectedField];
+          }
+        } else {
+          delete secondDoc[correctSelectedField];
+
+          newSubDocument = { ...secondDoc };
+        }
+      }
+      relatedDocArray.push(newSubDocument);
+    }
+    firstDocument[field] = relatedDocArray;
+  }
+
+  console.log(JSON.stringify(firstCollection));
 
   return firstCollection;
 };
