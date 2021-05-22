@@ -24,8 +24,11 @@ module.exports.checkApplyRelation = (
     // return if there is any selection
     if (typeof filter.populate === 'string' || !filter.populate.select)
       return data;
-    applySelectionRelation(filter.populate.select, data, filter.populate.field);
-    return data;
+    return applySelectionRelation(
+      filter.populate.select,
+      data,
+      filter.populate.field
+    );
   } else if (
     typeof filter.populate === 'string' &&
     schemaField instanceof Array

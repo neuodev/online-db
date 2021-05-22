@@ -242,16 +242,15 @@ module.exports.applySelectionRelation = (select, firstCollection, field) => {
             firstDocument[field][correctSelectedField];
         }
       } else {
-        delete firstDocument[correctSelectedField];
+        delete firstDocument[field][correctSelectedField];
 
-        newDocument = { ...firstDocument };
+        newDocument = { [field]: firstDocument[field] };
       }
     }
 
     firstDocument[field] = newDocument[field];
-    console.log(firstDocument);
-    // console.log(selectedData);
+   
   }
 
-  return selectedData;
+  return firstCollection;
 };
