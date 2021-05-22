@@ -40,7 +40,7 @@ module.exports = class Collection {
     if (this.schema) {
       this.schema.validateDataAganistSchema(data, this.dbName, this.docName);
     }
-
+    data.createdAt = new Date()
     collection.push(data);
     writeData(collection, collectionPath);
     return data;
