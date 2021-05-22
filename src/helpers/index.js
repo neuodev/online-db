@@ -167,7 +167,7 @@ function getCurrentField(fieldsToSortBy, item) {
     return currentField;
   }
   let nestedFields = fieldsToSortBy[0].split('.');
- 
+
   let field = item;
 
   for (let subField of nestedFields) {
@@ -175,7 +175,6 @@ function getCurrentField(fieldsToSortBy, item) {
     if (subField.startsWith('-')) correctSubField = subField.slice(1);
     field = field[correctSubField];
   }
- 
   return field;
 }
 
@@ -201,17 +200,15 @@ module.exports.applySorting = (filters, data) => {
     data = data.sort((a, b) => {
       let currentFieldA = getCurrentField(fieldsToSortBy, a);
       let currentFieldB = getCurrentField(fieldsToSortBy, b);
-      if (
-        !currentSortedField.startsWith('-') &&
-        a[currentFieldA] < b[currentFieldB]
-      ) {
-        return -1;
+      if (!currentSortedField.startsWith('-')) {
+        if (currentFieldA < currentFieldB) return -1;
+        else if (currentFieldA > currentFieldB) return 1;
+        return 0;
       }
-      if (
-        a[currentFieldA] > b[currentFieldB] &&
-        currentSortedField.startsWith('-')
-      ) {
-        return 1;
+      if (currentSortedField.startsWith('-')) {
+        if (currentFieldA < currentFieldB) return 1;
+        if (currentFieldA > currentFieldB) return -1;
+        return 0 
       }
       return 0;
     });
