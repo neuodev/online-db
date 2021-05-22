@@ -5,13 +5,13 @@ const Collection = require('./classes/Collection');
 const { initDB } = require('./utils/utils');
 module.exports = class OnlineDB {
   constructor(dbName) {
-    this.dbName = dbName;
+    this.dbName = dbName.toLowerCase();
     initDB(dbName);
   }
 
   createCollection(docName, schema) {
     if (!docName) throw new Error('Document name is required');
-    const docFile = `./${this.dbName}/${docName}.json`;
+    const docFile = `./OnlineDB/${this.dbName}/${docName}.json`;
 
     if (!fs.existsSync(docFile)) fs.writeFileSync(docFile, JSON.stringify([]));
 

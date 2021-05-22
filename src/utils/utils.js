@@ -2,7 +2,9 @@ const fs = require('fs');
 
 function initDB(dbName) {
   if (!dbName) throw new Error('DB name is required');
-  if (!fs.existsSync(`./${dbName}`)) fs.mkdirSync(`./${dbName}`);
+  if(!fs.existsSync('./OnlineDB')) fs.mkdirSync('./OnlineDB')
+  let validDBName = dbName.toLowerCase()
+  if (!fs.existsSync(`./OnlineDB/${validDBName}`)) fs.mkdirSync(`./OnlineDB/${validDBName}`);
 }
 function isDocExist(collectionPath) {
   return fs.existsSync(collectionPath);
@@ -41,7 +43,7 @@ function checkSeclect(selectArray) {
 }
 
 function getRelatedCollection(dbName, collectionName) {
-  const PATH = `./${dbName}/${collectionName}.json`;
+  const PATH = `./OnlineDB/${dbName}/${collectionName}.json`;
 
   if (!fs.existsSync(PATH)) {
     throwError(` "${collectionName}" Doesn't exist on your database `.bgRed);
