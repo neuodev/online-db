@@ -217,3 +217,41 @@ module.exports.applySelection = (select, data) => {
 
   return selectedData;
 };
+
+module.exports.applySelectionRelation = (select, firstCollection, field) => {
+  selectionInvalidType(select);
+  let selectedData = [];
+  if (select.length === 0) {
+    throwError('Please add selected fileds ');
+  }
+  const fieldsToSelect = select.split(' ');
+  checkSeclect(fieldsToSelect);
+
+  for (let firstDocument of firstCollection) {
+    let newDocument = {
+      [field]: {},
+    };
+    for (let selectedField of fieldsToSelect) {
+      let correctSelectedField = selectedField.startsWith('-')
+        ? selectedField.slice(1)
+        : selectedField;
+
+      if (!selectedField.startsWith('-')) {
+        if (firstDocument[field][correctSelectedField]) {
+          newDocument[field][correctSelectedField] =
+            firstDocument[field][correctSelectedField];
+        }
+      } else {
+        delete firstDocument[correctSelectedField];
+
+        newDocument = { ...firstDocument };
+      }
+    }
+
+    firstDocument[field] = newDocument[field];
+    console.log(firstDocument);
+    // console.log(selectedData);
+  }
+
+  return selectedData;
+};
