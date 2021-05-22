@@ -41,7 +41,7 @@ function checkSeclect(selectArray) {
 }
 
 function getRelatedCollection(dbName, collectionName) {
-  const PATH = `./${dbName}/${collectionName}`;
+  const PATH = `./${dbName}/${collectionName}.json`;
 
   if (!fs.existsSync(PATH)) {
     throwError(` "${collectionName}" Doesn't exist on your database `.bgRed);
