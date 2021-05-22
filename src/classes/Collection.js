@@ -40,7 +40,7 @@ module.exports = class Collection {
     if (this.schema) {
       this.schema.validateDataAganistSchema(data, this.dbName, this.docName);
     }
-    data.createdAt = new Date()
+    data.createdAt = new Date();
     collection.push(data);
     writeData(collection, collectionPath);
     return data;
@@ -117,8 +117,8 @@ module.exports = class Collection {
       documents[documentIdx][field] = fields[field];
     }
 
+    documents[documentIdx].updatedAt = new Date();
     writeData(documents, this.collectionPath);
-    // return documents[documentIdx];
   }
 
   updateOne(filter, updates) {
@@ -139,7 +139,7 @@ module.exports = class Collection {
       ...documents[documentIdx],
       ...updates,
     };
-
+    documents[documentIdx].updatedAt = new Date();
     writeData(documents, this.collectionPath);
   }
   // Delete one by id
@@ -155,7 +155,7 @@ module.exports = class Collection {
     // delete the document
     documents = documents.filter(document => document.id !== id);
 
-    writeData(documents);
+    writeData(documents, this.collectionPath);
   }
   // Delete many documents with given filter
   deleteMany(filter) {
@@ -175,7 +175,7 @@ module.exports = class Collection {
       document => document[filterKeys[0]] !== filter[filterKeys[0]]
     );
 
-    writeData(documents);
+    writeData(documents, this.collectionPath);
   }
 
   // Delete many documents with given filter
@@ -193,6 +193,6 @@ module.exports = class Collection {
     // Remove the document
     documents.splice(idx, 1);
 
-    writeData(documents);
+    writeData(documents, this.collectionPath);
   }
 };
