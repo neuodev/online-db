@@ -9,12 +9,13 @@ module.exports = class OnlineDB {
     initDB(dbName);
   }
 
-  createCollection(docName, schema) {
-    if (!docName) throw new Error('Document name is required');
-    const docFile = `./OnlineDB/${this.dbName}/${docName}.json`;
+  createCollection(colName, schema) {
+    if (!colName) throw new Error('Document name is required');
+    const validCollectionName = colName.toLowerCase()
+    const docFile = `./OnlineDB/${this.dbName}/${validCollectionName}.json`;
 
     if (!fs.existsSync(docFile)) fs.writeFileSync(docFile, JSON.stringify([]));
 
-    return new Collection(docName, this.dbName, schema);
+    return new Collection(validCollectionName, this.dbName, schema);
   }
 };
