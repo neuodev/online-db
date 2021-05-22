@@ -146,36 +146,69 @@ module.exports.checkApplyOrOperator = (field, filterValue, data) => {
 
 module.exports.checkApplyAllOperator = () => {};
 
+function checkForNestSortField(fieldsToSortBy, a) {
+  if (isNestedField) {
+    let newDoc = {};
+    const nestedField = fieldsToSortBy[0].split('.');
+    console.log(nestedField);
+  }
+  console.log(a);
+}
+
+function getCurrentField(fieldsToSortBy, item) {
+  const isNestedField = fieldsToSortBy[0].split('.').length > 1;
+
+  if (!isNestedField) {
+    let currentSortedField = fieldsToSortBy[0];
+
+    let currentField = currentSortedField.startsWith('-')
+      ? currentSortedField.slice(1)
+      : currentSortedField;
+    return currentField;
+  }
+  let nestedFields = fieldsToSortBy[0].split('.');
+ 
+  let field = item;
+
+  for (let subField of nestedFields) {
+    let correctSubField = subField;
+    if (subField.startsWith('-')) correctSubField = subField.slice(1);
+    field = field[correctSubField];
+  }
+ 
+  return field;
+}
+
 module.exports.applySorting = (filters, data) => {
   const fieldsToSortBy = filters.sort.split(' ');
   let currentSortedField = fieldsToSortBy[0];
-
-  let currentField = currentSortedField.startsWith('-')
-    ? currentSortedField.slice(1)
-    : currentSortedField;
   // sort by chars
   // sort by nesting field
   // accept many values
-  if (typeof data[0][currentField] === 'number') {
+  let currentFieldType = getCurrentField(fieldsToSortBy, data[0]);
+  if (typeof currentFieldType === 'number') {
     data = data.sort((a, b) => {
+      let currentFieldA = getCurrentField(fieldsToSortBy, a);
+      let currentFieldB = getCurrentField(fieldsToSortBy, b);
       if (!currentSortedField.startsWith('-')) {
-        return a[currentField] - b[currentField];
+        return currentFieldA - currentFieldB;
       } else {
-        return b[currentField] - a[currentField];
+        return currentFieldB - currentFieldA;
       }
     });
   }
-  if (typeof data[0][currentField] === 'string') {
+  if (typeof currentFieldType === 'string') {
     data = data.sort((a, b) => {
-      console.log(currentSortedField, currentField);
+      let currentFieldA = getCurrentField(fieldsToSortBy, a);
+      let currentFieldB = getCurrentField(fieldsToSortBy, b);
       if (
         !currentSortedField.startsWith('-') &&
-        a[currentField] < b[currentField]
+        a[currentFieldA] < b[currentFieldB]
       ) {
         return -1;
       }
       if (
-        a[currentField] > b[currentField] &&
+        a[currentFieldA] > b[currentFieldB] &&
         currentSortedField.startsWith('-')
       ) {
         return 1;
