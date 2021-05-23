@@ -149,6 +149,19 @@ module.exports = class Collection {
     data[0].updatedAt = new Date();
     writeData(collection, this.collectionPath);
   }
+
+  updateMany(filter, fieldsToUpdate) {
+    if (!(filter instanceof Object))
+      throwError('Expected filter to be an object'.bgRed);
+    if (!(fieldsToUpdate instanceof Object))
+      throwError('Expected fieldsToUpdate to be an object'.bgRed);
+    // get all data
+    const collection = getDataJson(this.collectionPath);
+    // apply filters
+    let data = applyFilter(filter, collection);
+    console.log(data);
+  }
+
   // Delete one by id
   deleteOneById(id) {
     if (!id) throwError('Expected id');
