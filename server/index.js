@@ -3,6 +3,7 @@ const cors = require('cors');
 const colros = require('colors');
 const databaseRouter = require('./routes/database');
 const errorHandler = require('./middlewares/error');
+const collectionRouter = require('./routes/collection');
 
 const startServer = context => {
   const app = express();
@@ -21,7 +22,8 @@ const startServer = context => {
 
   // API Routes
   app.use('/api/v1', databaseRouter);
-
+  app.use('/api/v1', collectionRouter);
+  
   // Error Handling
   app.use(errorHandler);
   const PORT = 9000;
