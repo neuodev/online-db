@@ -23,7 +23,6 @@ module.exports.applyUpdates = (data, schema, updates) => {
     }
   }
 
-
   return data;
 };
 
@@ -52,7 +51,7 @@ function updateNestedField(schema, document, field, fieldUpdateValue) {
   let schemaPath = schema;
   let targetField = document;
   for (let subField of fieldPath) {
-    if (!targetField[subField])
+    if (typeof targetField[subField] === 'undefined')
       throwError(`Path ${field} doesn't exist in the document`.bgRed);
     targetField = targetField[subField];
     schemaPath = schemaPath[subField];
@@ -66,9 +65,9 @@ function updateNestedField(schema, document, field, fieldUpdateValue) {
   }
 
   function set(path, value) {
-    var schema = document; // a moving reference to internal objects within obj
-    var pList = path.split('.');
-    var len = pList.length;
+    let schema = document; // a moving reference to internal objects within obj
+    let pList = path.split('.');
+    let len = pList.length;
     for (var i = 0; i < len - 1; i++) {
       var elem = pList[i];
       if (!schema[elem]) schema[elem] = {};
@@ -94,7 +93,6 @@ function updateArrayField(schema, document, field, fieldUpdateValue) {
   document = applyPopOperator(...params);
   document = applyReplaceOperator(...params);
   document = applyRemoveOperator(...params);
-  
 }
 
 function applyAddOperator(document, field, operator, newValues) {

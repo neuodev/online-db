@@ -112,20 +112,24 @@ module.exports = class Collection {
   }
   // Find one document and update it
   // @return the updated document
-  updateOneById(id, fields) {
-    if (!id) throwError('Expected id for updating ');
-    if (!(fields instanceof Object)) throwError('Expected fileds to be object');
+  updateOneById(id, fieldsToUpdate) {
+    if (!id) throwError(' "id" is required to update a document '.bgRed);
+    if (!(fieldsToUpdate instanceof Object))
+      throwError('Expected fileds to be object'.bgRed);
 
     const documents = getDataJson(this.collectionPath);
 
     const documentIdx = documents.findIndex(document => document.id === id);
     if (documentIdx === -1) throwError('Document Not Found');
 
-    for (let field in fields) {
-      documents[documentIdx][field] = fields[field];
-    }
-
-    documents[documentIdx].updatedAt = new Date();
+    let currentDocument = documents[documentIdx];
+    // apply your updates
+    currentDocument = applyUpdates(
+      [currentDocument],
+      this.schema.schema,
+      fieldsToUpdate
+    );
+    currentDocument.updatedAt = new Date();
     writeData(documents, this.collectionPath);
   }
 
