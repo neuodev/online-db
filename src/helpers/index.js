@@ -149,6 +149,8 @@ module.exports.checkApplyOrOperator = (field, filterValue, data) => {
 };
 
 module.exports.checkApplyAllOperator = (field, filterValue, data) => {
+  if (!filterValue.$all) return;
+
   if (!(filterValue.$all instanceof Array))
     throwError(
       `In "${field}" Field, $all operator accept an array but get a/an ${typeof filterValue}`

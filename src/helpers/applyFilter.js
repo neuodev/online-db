@@ -15,9 +15,7 @@ module.exports.applyFilter = (filters, data) => {
     let filterValue = filters[field];
     const params = [field, filterValue, data];
 
-    if (filterValue.$all) {
-      data = checkApplyAllOperator(...params);
-    } else if (filterValue instanceof Array) {
+    if (filterValue instanceof Array) {
       // check and apply the and operator
       data = applyAndOperator(filterValue, data);
       // check for logic operator $not
@@ -30,6 +28,8 @@ module.exports.applyFilter = (filters, data) => {
       const params = [field, filterValue, data];
       // check and apply the basic operator if they exist $gt, $gte, $lt, $lte
       data = checkApplyBasicOperators(...params);
+      // check and apply the all operator
+      data = checkApplyAllOperator(...params);
     } else if (typeof filters[field] !== 'object') {
       if (field === 'sort') continue;
       data = data.filter(item => checkDeepEquality(field, item, filterValue));
