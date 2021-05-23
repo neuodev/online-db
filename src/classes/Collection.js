@@ -15,6 +15,7 @@ const { applyFilter } = require('../helpers/applyFilter');
 const { selectionInvalidType } = require('../errors/collectionErrors');
 const { checkApplyRelation } = require('../relation');
 const { applySelection } = require('../helpers');
+const { applyUpdates } = require('../helpers/applyUpdates');
 module.exports = class Collection {
   constructor(docName, dbName, schema) {
     this.docName = docName;
@@ -159,7 +160,9 @@ module.exports = class Collection {
     const collection = getDataJson(this.collectionPath);
     // apply filters
     let data = applyFilter(filter, collection);
-    console.log(data);
+    // apply your updates
+    console.log(fieldsToUpdate);
+    applyUpdates(data, this.schema.schema, fieldsToUpdate);
   }
 
   // Delete one by id
