@@ -4,7 +4,7 @@ const colros = require('colors');
 const databaseRouter = require('./routes/database');
 const errorHandler = require('./middlewares/error');
 
-const startServer = () => {
+const startServer = context => {
   const app = express();
 
   // access from anoter port
@@ -12,6 +12,13 @@ const startServer = () => {
 
   // To allow write data to the server
   app.use(express.json());
+
+  // inject the database info
+  app.use((req, res, next) => {
+    req.context = context;
+    next();
+  });
+
   // API Routes
   app.use('/api/v1', databaseRouter);
 
