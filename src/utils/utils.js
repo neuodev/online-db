@@ -172,13 +172,25 @@ function clearDB() {
     'Are You Sure ( this operation is permanent )?[y/n] ',
     function (answer) {
       if (answer.toLocaleLowerCase() === 'y') {
-        // delete 
+        // delete
         fs.rmdirSync(PATH, { recursive: true });
         console.log(`All databases are delted now`.bgCyan);
       }
       rl.close();
     }
   );
+}
+
+function checkForArrayMatch(first, second) {
+  if (first.length !== second.length) return false;
+
+  for (let i = 0; i < first.length; i++) {
+    if (first[i] !== second[i]) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 module.exports = {
@@ -195,4 +207,5 @@ module.exports = {
   dropDB,
   removeCollection,
   clearDB,
+  checkForArrayMatch,
 };

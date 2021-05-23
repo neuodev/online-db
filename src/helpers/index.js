@@ -1,7 +1,11 @@
-const { throwError, getDataJson } = require('../utils/utils');
+const {
+  throwError,
+  getDataJson,
+  checkForArrayMatch,
+  checkSeclect,
+} = require('../utils/utils');
 const { isEmail } = require('../types/typesUtils');
 const { selectionInvalidType } = require('../errors/collectionErrors');
-const { checkSeclect } = require('../utils/utils');
 const fs = require('fs');
 module.exports.emailCheck = (schemaFieldValue, dataFieldValue, schemaField) => {
   if (schemaFieldValue.isEmail && dataFieldValue) {
@@ -144,16 +148,24 @@ module.exports.checkApplyOrOperator = (field, filterValue, data) => {
   return data;
 };
 
-module.exports.checkApplyAllOperator = () => {};
+module.exports.checkApplyAllOperator = (field, filterValue, data) => {
+  if (!(filterValue.$all instanceof Array))
+    throwError(
+      `In "${field}" Field, $all operator accept an array but get a/an ${typeof filterValue}`
+        .bgRed
+    );
+  if (data.length === 0) return data;
+  if (!(data[0][field] instanceof Array))
+    throwError(
+      ` $all operator used only to query a exact match array but the "${field}" field is a/an ${typeof data[0][
+        field
+      ]} `.bgRed
+    );
 
-function checkForNestSortField(fieldsToSortBy, a) {
-  if (isNestedField) {
-    let newDoc = {};
-    const nestedField = fieldsToSortBy[0].split('.');
-    console.log(nestedField);
-  }
-  console.log(a);
-}
+  return data.filter(document =>
+    checkForArrayMatch(document[field], filterValue.$all)
+  );
+};
 
 function getCurrentField(fieldsToSortBy, item) {
   const isNestedField = fieldsToSortBy[0].split('.').length > 1;
@@ -208,7 +220,7 @@ module.exports.applySorting = (filters, data) => {
       if (currentSortedField.startsWith('-')) {
         if (currentFieldA < currentFieldB) return 1;
         if (currentFieldA > currentFieldB) return -1;
-        return 0 
+        return 0;
       }
       return 0;
     });

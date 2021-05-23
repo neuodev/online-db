@@ -7,15 +7,17 @@ const {
   checkApplyNorOperator,
   checkApplyOrOperator,
   applySorting,
+  checkApplyAllOperator,
 } = require('.');
-const { throwError } = require('../utils/utils');
 module.exports.applyFilter = (filters, data) => {
   for (let field in filters) {
     if (field === 'select' || field === 'populate') continue;
     let filterValue = filters[field];
+    const params = [field, filterValue, data];
 
-    if (filterValue instanceof Array) {
-      const params = [field, filterValue, data];
+    if (filterValue.$all) {
+      data = checkApplyAllOperator(...params);
+    } else if (filterValue instanceof Array) {
       // check and apply the and operator
       data = applyAndOperator(filterValue, data);
       // check for logic operator $not
