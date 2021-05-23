@@ -375,7 +375,7 @@ module.exports.checkApplyUnique = (
   collection
 ) => {
   if (typeof schemaFieldValue.unique !== 'boolean') return;
-  const PATH = `./OnlineDB/${dbName}/${collection}.json`;
+  const PATH = `./OnlineDB/${dbName}/${collection}.onlinedb.db`;
   if (!fs.existsSync(PATH))
     throwError(
       ` "${collection}" doesn't exist on the "${dbName}" database  `.bgRed

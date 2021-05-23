@@ -19,7 +19,7 @@ module.exports = class Collection {
   constructor(docName, dbName, schema) {
     this.docName = docName;
     this.dbName = dbName;
-    this.collectionPath = `./OnlineDB/${this.dbName}/${this.docName}.json`;
+    this.collectionPath = `./OnlineDB/${this.dbName}/${this.docName}.onlinedb.db`;
     this.schema = schema;
   }
 
@@ -42,11 +42,13 @@ module.exports = class Collection {
     }
     data.createdAt = new Date();
     collection.push(data);
+    console.log(data);
     writeData(collection, collectionPath);
     return data;
   }
 
   insertMany(dataArr) {
+    console.log(dataArr, 'here');
     if (!isDocExist(this.collectionPath)) docNotFoundError();
     if (!(dataArr instanceof Array))
       throw new Error(' insertMany only accept array of items');
@@ -63,6 +65,7 @@ module.exports = class Collection {
 
     // read the file
     let data = getDataJson(this.collectionPath);
+
     // apply filters
     data = applyFilter(filter, data);
     if (filter && filter.skip) data = skip(data, filter.skip);

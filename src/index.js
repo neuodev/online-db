@@ -19,7 +19,7 @@ module.exports = class OnlineDB {
   createCollection(colName, schema) {
     if (!colName) throw new Error('Document name is required');
     const validCollectionName = colName.toLowerCase();
-    const docFile = `./OnlineDB/${this.dbName}/${validCollectionName}.json`;
+    const docFile = `./OnlineDB/${this.dbName}/${validCollectionName}.onlinedb.db`;
 
     if (!fs.existsSync(docFile)) fs.writeFileSync(docFile, JSON.stringify([]));
 

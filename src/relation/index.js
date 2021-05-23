@@ -60,7 +60,7 @@ function oneToOneRelation(field, dbName, schema, firstCollection) {
     throwError(`Schema don't have any ref for "${field}"`.bgRed);
   }
 
-  let secondCollectionPath = `./OnlineDB/${dbName}/${schema.schema[field].ref}.json`;
+  let secondCollectionPath = `./OnlineDB/${dbName}/${schema.schema[field].ref}.onlinedb.db`;
   if (!fs.existsSync(secondCollectionPath))
     throwError(`"${field}" collection doesn't exist `.bgRed);
   // read the second collection

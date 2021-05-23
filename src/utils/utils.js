@@ -50,7 +50,7 @@ function checkSeclect(selectArray) {
 }
 
 function getRelatedCollection(dbName, collectionName) {
-  const PATH = `./OnlineDB/${dbName}/${collectionName}.json`;
+  const PATH = `./OnlineDB/${dbName}/${collectionName}.onlinedb.db`;
 
   if (!fs.existsSync(PATH)) {
     throwError(` "${collectionName}" Doesn't exist on your database `.bgRed);
@@ -131,7 +131,7 @@ function removeCollection() {
     process.exit(0);
   }
   // check if the collection exist
-  const PATH = `./OnlineDB/${dbName}/${collectionName}.json`;
+  const PATH = `./OnlineDB/${dbName}/${collectionName}`;
 
   if (!fs.existsSync(PATH)) {
     console.log(
