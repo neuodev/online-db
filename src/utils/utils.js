@@ -202,13 +202,13 @@ function checkForArrayAnyMatch(first, second) {
 }
 
 function checkForArrayOpertors(query) {
-  if (!(query instanceof Object))
+  const ARRAY_OPERATORS = ['$add', '$pop', '$replace', '$remove'];
+  if (!(query instanceof Object) || Object.keys(query).length === 0)
     throwError(
       ` To update and array. You must provide an object with one of array operators ${JSON.stringify(
         ARRAY_OPERATORS
       )} `.bgRed
     );
-  const ARRAY_OPERATORS = ['$add', '$pop', '$replace', '$remove'];
   const arraySet = new Set(ARRAY_OPERATORS);
 
   if (Object.keys(query).length > 1)

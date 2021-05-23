@@ -10,6 +10,7 @@ module.exports.applyUpdates = (data, schema, updates) => {
       const params = [schema, document, field, fieldUpdateValue];
       //   update an array
       if (currentFieldValue instanceof Array) {
+      
         updateArrayField(...params);
       }
       //   update any first level field
@@ -83,6 +84,7 @@ function updateNestedField(schema, document, field, fieldUpdateValue) {
 }
 
 function updateArrayField(schema, document, field, fieldUpdateValue) {
+  // check that we don't have empty object 
   // check if the field value is an array or not
   checkForArrayOpertors(fieldUpdateValue);
 
@@ -91,7 +93,6 @@ function updateArrayField(schema, document, field, fieldUpdateValue) {
   checkUpdateArrayWithValidType(newValues, schema);
   const params = [document, field, operator, newValues];
   document = applyAddOperator(...params);
-
   console.log(document);
 }
 
@@ -101,6 +102,12 @@ function applyAddOperator(document, field, operator, newValues) {
   for (let newValue of newValues) {
     document[field].push(newValue);
   }
+
+  return document;
+}
+
+function applyPopOperator(document, field, operator, newValues) {
+  if (operator !== '$pop' || newValues !== true) return document;
 
   return document;
 }
