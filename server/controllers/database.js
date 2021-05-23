@@ -24,11 +24,10 @@ module.exports.getDatabases = (req, res, next) => {
 //@route POST api/v1/database/:dbName
 //@access Public
 module.exports.createDatabase = (req, res, next) => {
-  const { dbName } = req.query;
+  const { dbName } = req.params;
   const { document } = req.body;
 
   const dbNameLowercase = dbName.toLowerCase();
-  const documentLowercase = document.toLowerCase();
 
   // check if the db exist
   const DB_PATH = `./OnlineDB/${dbNameLowercase}`;
@@ -41,6 +40,7 @@ module.exports.createDatabase = (req, res, next) => {
 
   // create an optional document
   if (document) {
+    const documentLowercase = document.toLowerCase();
     const DOC_PATH = `./OnlineDB/${dbNameLowercase}/${documentLowercase}`;
     if (fs.existsSync(DOC_PATH)) {
       res
