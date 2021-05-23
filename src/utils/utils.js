@@ -201,6 +201,36 @@ function checkForArrayAnyMatch(first, second) {
   return false;
 }
 
+function checkForArrayOpertors(query) {
+  if (!(query instanceof Object))
+    throwError(
+      ` To update and array. You must provide an object with one of array operators ${JSON.stringify(
+        ARRAY_OPERATORS
+      )} `.bgRed
+    );
+  const ARRAY_OPERATORS = ['$add', '$pop', '$replace', '$remove'];
+  const arraySet = new Set(ARRAY_OPERATORS);
+
+  if (Object.keys(query).length > 1)
+    throwError(`To query an array you should pass one operator`.bgRed);
+
+  for (let param in query) {
+    if (!arraySet.has(param))
+      throwError(
+        `Invalid array operator (${param}). Should be one of these ${JSON.stringify(
+          ARRAY_OPERATORS
+        )}`.bgRed
+      );
+
+    if (!(query[param] instanceof Array) && param !== '$pop')
+      throwError(
+        ` ${param} operator should have type Array but get type ${typeof query[
+          param
+        ]}`.bgRed
+      );
+  }
+}
+
 module.exports = {
   isDocExist,
   docNotFoundError,
@@ -217,4 +247,5 @@ module.exports = {
   clearDB,
   checkForArrayExactMatch,
   checkForArrayAnyMatch,
+  checkForArrayOpertors,
 };

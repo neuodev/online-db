@@ -1,4 +1,4 @@
-const { throwError } = require('../utils/utils');
+const { throwError , checkForArrayOpertors } = require('../utils/utils');
 
 module.exports.applyUpdates = (data, schema, updates) => {
   //   @todo -> what will happen if the schema is optional
@@ -9,15 +9,14 @@ module.exports.applyUpdates = (data, schema, updates) => {
       const params = [schema, document, field, fieldUpdateValue];
       //   update an array
       if (currentFieldValue instanceof Array) {
+        updateArrayField(...params);
       }
       //   update any first level field
       else if (typeof currentFieldValue !== 'undefined') {
-        // console.log(currentFieldValue);
         updateFirstLevelField(...params);
       }
       //   update nested values
       else {
-        // console.log(field.split('.'));
         updateNestedField(...params);
       }
     }
@@ -80,4 +79,10 @@ function updateNestedField(schema, document, field, fieldUpdateValue) {
   }
 
   set(field, fieldUpdateValue);
+}
+
+function updateArrayField(schema, document, field, fieldUpdateValue) {
+  // check if the field value is an array or not 
+  checkForArrayOpertors(fieldUpdateValue)
+//   if(!(fieldUpdateValue instanceof Array ) ) throwError(`To update an array field `.bgRed)
 }
