@@ -65,8 +65,21 @@ const checkObjectType = (schemaFieldValue, dataFieldValue, schemaField) => {
   }
 };
 
+const checkUpdateArrayWithValidType = (newValues, schema) => {
+  if (typeof schema[0] !== 'function') return;
+  let schemaType = typeof schema[0].type();
+
+  for (let newValue of newValues) {
+    if (typeof newValue !== schemaType)
+      throwError(
+        `Try to update an array of ${schemaType} with type ${typeof newValue}`
+      );
+  }
+};
+
 module.exports = {
   checkArrayOfType,
   checkArrayType,
   checkObjectType,
+  checkUpdateArrayWithValidType,
 };

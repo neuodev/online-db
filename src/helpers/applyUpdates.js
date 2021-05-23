@@ -1,4 +1,5 @@
-const { throwError , checkForArrayOpertors } = require('../utils/utils');
+const { checkUpdateArrayWithValidType } = require('../types/types');
+const { throwError, checkForArrayOpertors } = require('../utils/utils');
 
 module.exports.applyUpdates = (data, schema, updates) => {
   //   @todo -> what will happen if the schema is optional
@@ -82,7 +83,24 @@ function updateNestedField(schema, document, field, fieldUpdateValue) {
 }
 
 function updateArrayField(schema, document, field, fieldUpdateValue) {
-  // check if the field value is an array or not 
-  checkForArrayOpertors(fieldUpdateValue)
-//   if(!(fieldUpdateValue instanceof Array ) ) throwError(`To update an array field `.bgRed)
+  // check if the field value is an array or not
+  checkForArrayOpertors(fieldUpdateValue);
+
+  const [operator, newValues] = Object.entries(fieldUpdateValue)[0];
+  //  make sure that he update with right type of data
+  checkUpdateArrayWithValidType(newValues, schema);
+  const params = [document, field, operator, newValues];
+  document = applyAddOperator(...params);
+
+  console.log(document);
+}
+
+function applyAddOperator(document, field, operator, newValues) {
+  if (operator !== '$add') return document;
+
+  for (let newValue of newValues) {
+    document[field].push(newValue);
+  }
+
+  return document;
 }
