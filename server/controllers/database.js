@@ -21,21 +21,30 @@ module.exports.getDatabases = (req, res, next) => {
 };
 
 //@desc  Create new Database
-//@route POST api/v1/database
+//@route POST api/v1/database/:dbName
 //@access Public
-module.exports.CreateDatabase = (req, res, next) => {
-  // like -> [firstDatase, secondDatabse]
-  let results = {};
-  const databases = fs.readdirSync('./OnlineDB');
+module.exports.createDatabase = (req, res, next) => {
+  const { dbName } = req.query;
+  const { document } = req.body;
 
-  for (let database of databases) {
-    const files = fs.readdirSync(`./OnlineDB/${database}`);
-    let collections = [];
-    for (let fileName of files) {
-      collections.push(fileName.split('.')[0]);
+  // check if the db exist
+  const isExist = fs.existsSync(`./OnlineDB/${dbName}`);
+  if (isExist)
+    return res.status(400).json({ error: `${dbName} already exist` });
+
+  // create the database
+  fs.mkdirSync(`./OnlineDB/${dbName}`);
+
+  // create an optional document
+  if (document) {
+    const DOC_PATH = `./OnlineDB/${dbName}/${document}`;
+    if (fs.existsSync(DOC_PATH)) {
+      res.status(400).json({ error: 'Document already exist' });
+      return;
     }
-    results[database] = collections;
+
+    fs.mkdirSync(DOC_PATH);
   }
 
-  res.status(200).json(results);
+  res.status(201).json({ success: true });
 };
