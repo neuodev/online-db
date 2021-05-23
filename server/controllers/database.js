@@ -27,19 +27,25 @@ module.exports.createDatabase = (req, res, next) => {
   const { dbName } = req.query;
   const { document } = req.body;
 
+  const dbNameLowercase = dbName.toLowerCase();
+  const documentLowercase = document.toLowerCase();
+
   // check if the db exist
-  const isExist = fs.existsSync(`./OnlineDB/${dbName}`);
+  const DB_PATH = `./OnlineDB/${dbNameLowercase}`;
+  const isExist = fs.existsSync(DB_PATH);
   if (isExist)
-    return res.status(400).json({ error: `${dbName} already exist` });
+    return res.status(400).json({ error: `${dbNameLowercase} already exist` });
 
   // create the database
-  fs.mkdirSync(`./OnlineDB/${dbName}`);
+  fs.mkdirSync(DB_PATH);
 
   // create an optional document
   if (document) {
-    const DOC_PATH = `./OnlineDB/${dbName}/${document}`;
+    const DOC_PATH = `./OnlineDB/${dbNameLowercase}/${documentLowercase}`;
     if (fs.existsSync(DOC_PATH)) {
-      res.status(400).json({ error: 'Document already exist' });
+      res
+        .status(400)
+        .json({ error: `${documentLowercase} document already exist` });
       return;
     }
 
