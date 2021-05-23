@@ -1,5 +1,6 @@
 const fs = require('fs');
 const readline = require('readline');
+const { startServer } = require('../../server');
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -7,11 +8,19 @@ const rl = readline.createInterface({
 });
 
 function initDB(dbName) {
-  if (!dbName) throw new Error('DB name is required');
+  if (!dbName) throwError('DB name is required'.bgRed);
+  // check if the main `OnlineDB` file exist
   if (!fs.existsSync('./OnlineDB')) fs.mkdirSync('./OnlineDB');
+  // all files and folders should be lowercase
   let validDBName = dbName.toLowerCase();
+  // check if the exist
   if (!fs.existsSync(`./OnlineDB/${validDBName}`))
     fs.mkdirSync(`./OnlineDB/${validDBName}`);
+
+    // Start server that serve the GUI 
+  if (process.env.NODE_ENV !== 'production') {
+    startServer();
+  }
 }
 function isDocExist(collectionPath) {
   return fs.existsSync(collectionPath);
