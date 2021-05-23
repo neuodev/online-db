@@ -1,3 +1,4 @@
+const fs = require('fs');
 //@desc   get document details
 //@route  PUT api/v1/collection/:database/:collection
 //@access Public
@@ -14,8 +15,13 @@ module.exports.getDocumentDtails = (req, res, next) => {
   const COLLECTION_PATH = `./OnlineDB/${databaseLowercase}/${collectionLowercase}.onlinedb.db`;
   const isDocExist = fs.existsSync(COLLECTION_PATH);
   if (!isDocExist) return next(new ErrorResponse(`Collection not found`, 400));
+  const ctx = req.context;
 
+  const Document = ctx.find(
+    item => item.database.toLowerCase() === databaseLowercase
+  ).documents;
 
+  console.log(Document);
 
   res.status(201).json({ success: true });
 };
