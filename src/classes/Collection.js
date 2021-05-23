@@ -185,18 +185,19 @@ module.exports = class Collection {
   deleteMany(filter) {
     if (!(filter instanceof Object))
       throwError('Filter should be type of object');
-    let collection = getDataJson(this.collectionPath);
+    const collection = getDataJson(this.collectionPath);
     // apply filters
-    let data = applyFilter(filter, collection);
+    let documentsToDelete = applyFilter(filter, collection);
     let newCollection = [];
 
     for (let document of collection) {
       // check if it is in the deleted documents
-      const idx = data.findIndex(doc => doc.id == document.id);
-      if (idx === -1) continue;
-      newCollection.push(document);
+      const idx = documentsToDelete.findIndex(doc => doc.id == document.id);
+      // push it if it's not exist
+      if (idx === -1) {
+        newCollection.push(document);
+      }
     }
-
     writeData(newCollection, this.collectionPath);
   }
 
@@ -204,17 +205,19 @@ module.exports = class Collection {
   deleteOne(filter) {
     if (!(filter instanceof Object))
       throwError('Filter should be type of object');
-    let documents = getDataJson(this.collectionPath);
 
-    const filterKeys = Object.keys(filter);
-    // check if the document exist
-    const idx = documents.findIndex(
-      document => document[filterKeys[0]] === filter[filterKeys[0]]
-    );
-    if (idx === -1) throwError("Document dont' found ");
+    // get all data
+    const collection = getDataJson(this.collectionPath);
+    // apply filters
+    let data = applyFilter(filter, collection);
+    if (data.length === 0) throwError('Document not found '.bgRed);
     // Remove the document
-    documents.splice(idx, 1);
+    const documentToDelete = data[0];
+    const docIdx = collection.findIndex(doc => doc.id == documentToDelete.id);
+    collection.splice(docIdx, 1);
 
-    writeData(documents, this.collectionPath);
+    writeData(collection, this.collectionPath);
+
+    return documentToDelete;
   }
 };
