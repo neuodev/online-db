@@ -32,8 +32,7 @@ module.exports.createDatabase = (req, res, next) => {
   // check if the db exist
   const DB_PATH = `./OnlineDB/${dbNameLowercase}`;
   const isExist = fs.existsSync(DB_PATH);
-  if (isExist)
-    return res.status(400).json({ error: `${dbNameLowercase} already exist` });
+  if (isExist) return res.status(400).json({ error: `Database already exist` });
 
   // create the database
   fs.mkdirSync(DB_PATH);
@@ -41,15 +40,13 @@ module.exports.createDatabase = (req, res, next) => {
   // create an optional document
   if (document) {
     const documentLowercase = document.toLowerCase();
-    const DOC_PATH = `./OnlineDB/${dbNameLowercase}/${documentLowercase}`;
+    const DOC_PATH = `./OnlineDB/${dbNameLowercase}/${documentLowercase}.onlinedb.db`;
     if (fs.existsSync(DOC_PATH)) {
-      res
-        .status(400)
-        .json({ error: `${documentLowercase} document already exist` });
+      res.status(400).json({ error: `Document already exist` });
       return;
     }
 
-    fs.mkdirSync(DOC_PATH);
+    fs.writeFileSync(DOC_PATH, JSON.stringify([]));
   }
 
   res.status(201).json({ success: true });
