@@ -1,5 +1,8 @@
 const fs = require('fs');
 
+//@desc  get all databases and its documents  
+//@route GET api/v1/database
+//@access Public
 module.exports.getDatabases = (req, res, next) => {
   // like -> [firstDatase, secondDatabse]
   let results = {};
