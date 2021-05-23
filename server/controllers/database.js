@@ -73,3 +73,28 @@ module.exports.deleteDatabase = (req, res, next) => {
 
   res.status(201).json({ success: true });
 };
+
+//@desc   update database name
+//@route  PUT api/v1/database/:dbName
+//@access Public
+module.exports.updateDB = (req, res, next) => {
+  const { dbName } = req.params;
+  const { newDatatbaseName } = req.body;
+
+  if (!newDatatbaseName)
+    return next(new ErrorResponse('New database name is required', 400));
+
+  const oldDBNameLowercase = dbName.toLowerCase();
+  const newDBNameLowercase = newDatatbaseName.toLowerCase();
+  // check if the db exist
+  const OLD_DB_PATH = `./OnlineDB/${oldDBNameLowercase}`;
+
+  const NEW_DB_PATH = `./OnlineDB/${newDBNameLowercase}`;
+  const isExist = fs.existsSync(OLD_DB_PATH);
+  if (!isExist) return next(new ErrorResponse(`Database not found`, 400));
+
+  // update the database name
+  fs.renameSync(OLD_DB_PATH, NEW_DB_PATH);
+
+  res.status(201).json({ success: true });
+};
