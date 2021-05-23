@@ -129,10 +129,10 @@ module.exports = class Collection {
     writeData(documents, this.collectionPath);
   }
 
-  updateOne(filter, updates) {
+  updateOne(filter, fieldsToUpdate) {
     if (!(filter instanceof Object))
       throwError('Expected filter to be an object');
-    if (!(updates instanceof Object))
+    if (!(fieldsToUpdate instanceof Object))
       throwError('Expected updates to be an object');
 
     const collection = getDataJson(this.collectionPath);
@@ -141,14 +141,14 @@ module.exports = class Collection {
     let data = applyFilter(filter, collection);
     if (data.length === 0) throwError('Document not found');
 
-    for (let fieldToUpdate in updates) {
-      let filedToUpdateValue = updates[fieldToUpdate];
-
-      let document = data[0];
-      document[fieldToUpdate] = filedToUpdateValue;
-    }
+    // apply your updates
+    data = applyUpdates([data[0]], this.schema.schema, fieldsToUpdate);
+    // update updateAt  field
     data[0].updatedAt = new Date();
+
     writeData(collection, this.collectionPath);
+
+    return data[0];
   }
 
   updateMany(filter, fieldsToUpdate) {
