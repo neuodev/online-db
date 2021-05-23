@@ -51,3 +51,22 @@ module.exports.createDatabase = (req, res, next) => {
 
   res.status(201).json({ success: true });
 };
+
+//@desc   Delte database
+//@route DELTE api/v1/database/:dbName
+//@access Public
+module.exports.deleteDatabase = (req, res, next) => {
+  const { dbName } = req.params;
+
+  const dbNameLowercase = dbName.toLowerCase();
+
+  // check if the db exist
+  const DB_PATH = `./OnlineDB/${dbNameLowercase}`;
+  const isExist = fs.existsSync(DB_PATH);
+  if (!isExist) return res.status(400).json({ error: `Database not found ` });
+
+  // delete the database
+  fs.rmdirSync(DB_PATH, { recursive: true });
+
+  res.status(201).json({ success: true });
+};
