@@ -10,12 +10,14 @@ const {
   throwError,
   writeData,
   checkSeclect,
+  initCollection,
 } = require('../utils/utils');
 const { applyFilter } = require('../helpers/applyFilter');
 const { selectionInvalidType } = require('../errors/collectionErrors');
 const { checkApplyRelation } = require('../relation');
 const { applySelection } = require('../helpers');
 const { applyUpdates } = require('../helpers/applyUpdates');
+
 module.exports = class Collection {
   constructor(docName, dbName, schema) {
     this.docName = docName;

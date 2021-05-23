@@ -7,6 +7,7 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
+
 function initDB(dbName) {
   if (!dbName) throwError('DB name is required'.bgRed);
   // check if the main `OnlineDB` file exist
@@ -16,11 +17,6 @@ function initDB(dbName) {
   // check if the exist
   if (!fs.existsSync(`./OnlineDB/${validDBName}`))
     fs.mkdirSync(`./OnlineDB/${validDBName}`);
-
-    // Start server that serve the GUI 
-  if (process.env.NODE_ENV !== 'production') {
-    startServer();
-  }
 }
 function isDocExist(collectionPath) {
   return fs.existsSync(collectionPath);
