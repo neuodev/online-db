@@ -1,7 +1,7 @@
 {
   "name": "onlinedb",
   "version": "1.4.3",
-  "description": "OnlineDB is light weight open source No-SQL database uses document data model for store and retrieve data.",
+  "description": "Fast, unopinionated, minimalist, open source, No-SQL database uses document data model for store and retrieve data.",
   "main": "index.js",
   "bin": "index.js",
   "scripts": {
