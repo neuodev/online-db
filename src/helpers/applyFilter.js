@@ -8,6 +8,7 @@ const {
   checkApplyOrOperator,
   applySorting,
   checkApplyAllOperator,
+  checkApplyInOperator,
 } = require('.');
 module.exports.applyFilter = (filters, data) => {
   for (let field in filters) {
@@ -28,8 +29,10 @@ module.exports.applyFilter = (filters, data) => {
       const params = [field, filterValue, data];
       // check and apply the basic operator if they exist $gt, $gte, $lt, $lte
       data = checkApplyBasicOperators(...params);
-      // check and apply the all operator
+      // check and apply the `all` operator
       data = checkApplyAllOperator(...params);
+      // check and apply the `in` operator
+      data = checkApplyInOperator(...params);
     } else if (typeof filters[field] !== 'object') {
       if (field === 'sort') continue;
       data = data.filter(item => checkDeepEquality(field, item, filterValue));

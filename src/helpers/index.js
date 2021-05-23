@@ -1,8 +1,9 @@
 const {
   throwError,
   getDataJson,
-  checkForArrayMatch,
+  checkForArrayAnyMatch,
   checkSeclect,
+  checkForArrayExactMatch,
 } = require('../utils/utils');
 const { isEmail } = require('../types/typesUtils');
 const { selectionInvalidType } = require('../errors/collectionErrors');
@@ -149,7 +150,7 @@ module.exports.checkApplyOrOperator = (field, filterValue, data) => {
 };
 
 module.exports.checkApplyAllOperator = (field, filterValue, data) => {
-  if (!filterValue.$all) return;
+  if (!filterValue.$all) return data;
 
   if (!(filterValue.$all instanceof Array))
     throwError(
@@ -165,7 +166,28 @@ module.exports.checkApplyAllOperator = (field, filterValue, data) => {
     );
 
   return data.filter(document =>
-    checkForArrayMatch(document[field], filterValue.$all)
+    checkForArrayExactMatch(document[field], filterValue.$all)
+  );
+};
+
+module.exports.checkApplyInOperator = (field, filterValue, data) => {
+  if (!filterValue.$in) return data;
+
+  if (!(filterValue.$in instanceof Array))
+    throwError(
+      `In "${field}" Field, $in operator accept an array but get a/an ${typeof filterValue}`
+        .bgRed
+    );
+  if (data.length === 0) return data;
+  if (!(data[0][field] instanceof Array))
+    throwError(
+      ` $in operator used only to query a exact match array but the "${field}" field is a/an ${typeof data[0][
+        field
+      ]} `.bgRed
+    );
+
+  return data.filter(document =>
+    checkForArrayAnyMatch(document[field], filterValue.$in)
   );
 };
 

@@ -181,7 +181,7 @@ function clearDB() {
   );
 }
 
-function checkForArrayMatch(first, second) {
+function checkForArrayExactMatch(first, second) {
   if (first.length !== second.length) return false;
 
   for (let i = 0; i < first.length; i++) {
@@ -191,6 +191,14 @@ function checkForArrayMatch(first, second) {
   }
 
   return true;
+}
+function checkForArrayAnyMatch(first, second) {
+  for (let secondItem of second) {
+    for (let firstItem of first) {
+      if (firstItem === secondItem) return true;
+    }
+  }
+  return false;
 }
 
 module.exports = {
@@ -207,5 +215,6 @@ module.exports = {
   dropDB,
   removeCollection,
   clearDB,
-  checkForArrayMatch,
+  checkForArrayExactMatch,
+  checkForArrayAnyMatch,
 };
