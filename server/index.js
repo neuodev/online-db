@@ -20,7 +20,7 @@ const startServer = () => {
   app.use(errorHandler)
   const PORT = 9000;
   app.listen(PORT, () =>
-    console.log(`Visualize you database on port ${PORT} `.bgGreen)
+    console.log(`Visualize you database on  http://localhost:${PORT} `.bgGreen)
   );
 };
 
