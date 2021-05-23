@@ -43,13 +43,11 @@ module.exports = class Collection {
     }
     data.createdAt = new Date();
     collection.push(data);
-    console.log(data);
     writeData(collection, collectionPath);
     return data;
   }
 
   insertMany(dataArr) {
-    console.log(dataArr, 'here');
     if (!isDocExist(this.collectionPath)) docNotFoundError();
     if (!(dataArr instanceof Array))
       throw new Error(' insertMany only accept array of items');
