@@ -1,6 +1,7 @@
 db
 node_modules
 test-client.js
+server-client.js
 test-update.js
 relation-client.js
 OnlineDB
