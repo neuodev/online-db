@@ -191,7 +191,10 @@ module.exports.checkApplyInOperator = (field, filterValue, data) => {
   );
 };
 
-function getCurrentField(fieldsToSortBy, item) {
+module.exports.getCurrentField = function getCurrentField(
+  fieldsToSortBy,
+  item
+) {
   const isNestedField = fieldsToSortBy[0].split('.').length > 1;
 
   if (!isNestedField) {
@@ -212,7 +215,7 @@ function getCurrentField(fieldsToSortBy, item) {
     field = field[correctSubField];
   }
   return field;
-}
+};
 
 module.exports.applySorting = (filters, data) => {
   const fieldsToSortBy = filters.sort.split(' ');
@@ -220,6 +223,7 @@ module.exports.applySorting = (filters, data) => {
   // sort by chars
   // sort by nesting field
   // accept many values
+  const getCurrentField = this.getCurrentField
   let currentFieldType = getCurrentField(fieldsToSortBy, data[0]);
   if (typeof currentFieldType === 'number') {
     data = data.sort((a, b) => {
@@ -392,8 +396,3 @@ module.exports.checkApplyUnique = (
         .bgRed
     );
 };
-
-module.exports.replaceDocuments = (newDocuments , oldDocuments) =>{
-
-
-}

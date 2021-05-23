@@ -161,7 +161,6 @@ module.exports = class Collection {
     // apply filters
     let data = applyFilter(filter, collection);
     // apply your updates
-    console.log(fieldsToUpdate);
     data = applyUpdates(data, this.schema.schema, fieldsToUpdate);
     // replace the old document by the new ones
     writeData(collection, this.collectionPath);
