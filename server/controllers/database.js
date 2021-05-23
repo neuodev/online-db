@@ -1,4 +1,5 @@
 const fs = require('fs');
+const ErrorResponse = require('../utils/ErrorResponse');
 
 //@desc  get all databases and its documents
 //@route GET api/v1/database
@@ -17,6 +18,9 @@ module.exports.getDatabases = (req, res, next) => {
     results[database] = collections;
   }
 
+  if (Object.keys(results).length === 0)
+    return next(new ErrorResponse(`No database found`));
+
   res.status(200).json(results);
 };
 
@@ -32,7 +36,7 @@ module.exports.createDatabase = (req, res, next) => {
   // check if the db exist
   const DB_PATH = `./OnlineDB/${dbNameLowercase}`;
   const isExist = fs.existsSync(DB_PATH);
-  if (isExist) return res.status(400).json({ error: `Database already exist` });
+  if (isExist) return next(new ErrorResponse(`Database not found`, 400));
 
   // create the database
   fs.mkdirSync(DB_PATH);
@@ -42,8 +46,7 @@ module.exports.createDatabase = (req, res, next) => {
     const documentLowercase = document.toLowerCase();
     const DOC_PATH = `./OnlineDB/${dbNameLowercase}/${documentLowercase}.onlinedb.db`;
     if (fs.existsSync(DOC_PATH)) {
-      res.status(400).json({ error: `Document already exist` });
-      return;
+      return next(new ErrorResponse(`Document not found`, 400));
     }
 
     fs.writeFileSync(DOC_PATH, JSON.stringify([]));
@@ -63,7 +66,7 @@ module.exports.deleteDatabase = (req, res, next) => {
   // check if the db exist
   const DB_PATH = `./OnlineDB/${dbNameLowercase}`;
   const isExist = fs.existsSync(DB_PATH);
-  if (!isExist) return res.status(400).json({ error: `Database not found ` });
+  if (!isExist) return next(new ErrorResponse(`Database not found`, 400));
 
   // delete the database
   fs.rmdirSync(DB_PATH, { recursive: true });
