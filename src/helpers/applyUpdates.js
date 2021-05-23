@@ -23,7 +23,6 @@ module.exports.applyUpdates = (data, schema, updates) => {
     }
   }
 
-  //   console.log(data);
 
   return data;
 };
@@ -94,7 +93,8 @@ function updateArrayField(schema, document, field, fieldUpdateValue) {
   document = applyAddOperator(...params);
   document = applyPopOperator(...params);
   document = applyReplaceOperator(...params);
-  console.log(document);
+  document = applyRemoveOperator(...params);
+  
 }
 
 function applyAddOperator(document, field, operator, newValues) {
@@ -116,5 +116,11 @@ function applyPopOperator(document, field, operator, newValues) {
 function applyReplaceOperator(document, field, operator, newValues) {
   if (operator !== '$replace') return document;
   document[field] = newValues;
+  return document;
+}
+function applyRemoveOperator(document, field, operator, newValues) {
+  if (operator !== '$remove') return document;
+  const valuesSet = new Set(newValues);
+  document[field] = document[field].filter(item => !valuesSet.has(item));
   return document;
 }
