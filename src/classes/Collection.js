@@ -162,7 +162,9 @@ module.exports = class Collection {
     let data = applyFilter(filter, collection);
     // apply your updates
     console.log(fieldsToUpdate);
-    applyUpdates(data, this.schema.schema, fieldsToUpdate);
+    data = applyUpdates(data, this.schema.schema, fieldsToUpdate);
+    // replace the old document by the new ones
+    writeData(collection, this.collectionPath);
   }
 
   // Delete one by id

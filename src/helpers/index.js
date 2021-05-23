@@ -392,3 +392,8 @@ module.exports.checkApplyUnique = (
         .bgRed
     );
 };
+
+module.exports.replaceDocuments = (newDocuments , oldDocuments) =>{
+
+
+}

@@ -2,7 +2,6 @@ const { throwError } = require('../utils/utils');
 
 module.exports.applyUpdates = (data, schema, updates) => {
   //   @todo -> what will happen if the schema is optional
-  console.log(updates);
   for (document of data) {
     for (let field in updates) {
       const fieldUpdateValue = updates[field];
@@ -21,6 +20,10 @@ module.exports.applyUpdates = (data, schema, updates) => {
       }
     }
   }
+
+//   console.log(data);
+
+  return data;
 };
 
 function updateFirstLevelField(schema, document, field, fieldUpdateValue) {
@@ -39,4 +42,7 @@ function updateFirstLevelField(schema, document, field, fieldUpdateValue) {
       ` "${field}" should be of type "${schemaType}" but get type of "${updateType}"`
         .bgRed
     );
+
+  // Update the document
+  document[field] = fieldUpdateValue;
 }
