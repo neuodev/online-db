@@ -15,7 +15,8 @@ module.exports.parseSchema = schema => {
       schemaCopy[field] = [typeof fieldValue[0]()];
     } else if (
       fieldValue instanceof Array &&
-      typeof fieldValue[0] !== 'function'
+      typeof fieldValue[0] !== 'function' &&
+      fieldValue[0].type !== 'ObjectId'
     ) {
       // comments = [{body: String}]
       for (let arraySubField in fieldValue[0]) {
@@ -38,8 +39,12 @@ module.exports.parseSchema = schema => {
           subFieldValue instanceof Object &&
           typeof subFieldValue.type !== 'undefined'
         ) {
-          // body: {type: String}
-          schemaCopy[field][subField] = typeof subFieldValue.type();
+          if (subFieldValue.type !== 'ObjectId') {
+            // body: {type: String}
+            schemaCopy[field][subField] = typeof subFieldValue.type();
+          } else {
+            schemaCopy[field] = `Many ${subFieldValue.ref}`;
+          }
         }
       }
       // muliple levels
@@ -47,9 +52,13 @@ module.exports.parseSchema = schema => {
       fieldValue instanceof Object &&
       typeof fieldValue.type !== 'undefined'
     ) {
-      // name: {type: String, required: true}
-      schemaCopy[field] = { ...schema[field] };
-      schemaCopy[field].type = typeof fieldValue.type();
+      if (fieldValue.type == 'ObjectId') {
+        schemaCopy[field] = `One ${fieldValue.ref}`;
+      } else {
+        // name: {type: String, required: true}
+        schemaCopy[field] = { ...schema[field] };
+        schemaCopy[field].type = typeof fieldValue.type();
+      }
     }
   }
 
