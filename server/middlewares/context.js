@@ -1,3 +1,7 @@
+const OnlineDB = require('../../src');
+const Collection = require('../../src/classes/Collection');
+const ErrorResponse = require('../utils/ErrorResponse');
+
 module.exports.applyCtx = (req, res, next) => {
   const context = req.context;
   // context should be of type array

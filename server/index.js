@@ -6,8 +6,6 @@ const errorHandler = require('./middlewares/error');
 const collectionRouter = require('./routes/collection');
 const ErrorResponse = require('./utils/ErrorResponse');
 
-const OnlineDB = require('../src');
-const Collection = require('../src/classes/Collection');
 const { applyCtx } = require('./middlewares/context');
 
 const startServer = context => {
@@ -19,7 +17,10 @@ const startServer = context => {
   // To allow write data to the server
   app.use(express.json());
 
-  app.use(req => (req.context = context));
+  app.use((req, res, next) => {
+    req.context = context;
+    next();
+  });
 
   // inject the database info
   app.use(applyCtx);
