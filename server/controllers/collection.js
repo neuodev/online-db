@@ -1,5 +1,6 @@
 const fs = require('fs');
 const ErrorResponse = require('../utils/ErrorResponse');
+const { parseSchema } = require('../utils/parseSchema');
 //@desc   get document details
 //@route  PUT api/v1/collection/:database/:collection
 //@access Public
@@ -41,8 +42,9 @@ module.exports.getDocumentDtails = (req, res, next) => {
     );
 
   const { colName, dbName, collectionPath, schema } = currentCollection;
-  const schemaCopy = { ...schema.schema };
+
+  const parsedSceam = parseSchema(schema.schema);
   res
     .status(201)
-    .json({ colName, dbName, collectionPath, schema: schema.schema });
+    .json({ colName, dbName, collectionPath, schema: parsedSceam });
 };

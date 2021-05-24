@@ -1,0 +1,43 @@
+const deepcopy = require('deepcopy');
+module.exports.parseSchema = schema => {
+  const schemaCopy = deepcopy(schema);
+  for (let field in schemaCopy) {
+    let fieldValue = schemaCopy[field];
+    if (typeof fieldValue === 'function') {
+      // like id: String
+      schemaCopy[field] = typeof fieldValue();
+    } else if (fieldValue instanceof Array) {
+      // comments = [Numbers]
+      schemaCopy[field] = [typeof fieldValue[0]()];
+    } else if (
+      fieldValue instanceof Object &&
+      typeof fieldValue.type === 'undefined'
+    ) {
+      // meta: {body: String, date: Date}
+      for (let subField in fieldValue) {
+        // first level
+        const subFieldValue = fieldValue[subField];
+        if (typeof subFieldValue === 'function') {
+          // body: String
+          schemaCopy[field][subField] = typeof subFieldValue();
+        } else if (
+          subFieldValue instanceof Object &&
+          typeof subFieldValue.type !== 'undefined'
+        ) {
+          // body: {type: String}
+          schemaCopy[field][subField] = typeof subFieldValue.type();
+        }
+      }
+      // muliple levels
+    } else if (
+      fieldValue instanceof Object &&
+      typeof fieldValue.type !== 'undefined'
+    ) {
+      // name: {type: String, required: true}
+      schemaCopy[field] = { ...schema[field] };
+      schemaCopy[field].type = typeof fieldValue.type();
+    }
+  }
+
+  return schemaCopy;
+};
