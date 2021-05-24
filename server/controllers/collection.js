@@ -1,4 +1,5 @@
 const fs = require('fs');
+const ErrorResponse = require('../utils/ErrorResponse');
 //@desc   get document details
 //@route  PUT api/v1/collection/:database/:collection
 //@access Public
@@ -17,11 +18,31 @@ module.exports.getDocumentDtails = (req, res, next) => {
   if (!isDocExist) return next(new ErrorResponse(`Collection not found`, 400));
   const ctx = req.context;
 
-  const Document = ctx.find(
-    item => item.database.toLowerCase() === databaseLowercase
-  ).documents;
+  const DB = ctx.find(item => item.database.dbName === databaseLowercase);
 
-  console.log(Document);
+  if (!DB)
+    return next(
+      new ErrorResponse(
+        `"${databaseLowercase}" datbase isn't provided in the context`,
+        400
+      )
+    );
 
-  res.status(201).json({ success: true });
+  const currentCollection = DB.documents.find(
+    col => col.colName === collectionLowercase
+  );
+
+  if (!currentCollection)
+    return next(
+      new ErrorResponse(
+        `"${collectionLowercase}" collection isn't provided in the context`,
+        400
+      )
+    );
+
+  const { colName, dbName, collectionPath, schema } = currentCollection;
+  const schemaCopy = { ...schema.schema };
+  res
+    .status(201)
+    .json({ colName, dbName, collectionPath, schema: schema.schema });
 };

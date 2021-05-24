@@ -16,10 +16,10 @@ const { applySelection } = require('../helpers');
 const { applyUpdates } = require('../helpers/applyUpdates');
 
 module.exports = class Collection {
-  constructor(docName, dbName, schema) {
-    this.docName = docName;
+  constructor(colName, dbName, schema) {
+    this.colName = colName;
     this.dbName = dbName;
-    this.collectionPath = `./OnlineDB/${this.dbName}/${this.docName}.onlinedb.db`;
+    this.collectionPath = `./OnlineDB/${this.dbName}/${this.colName}.onlinedb.db`;
     this.schema = schema;
   }
 
@@ -38,7 +38,7 @@ module.exports = class Collection {
     }
     // if there is any schema -> run validation
     if (this.schema) {
-      this.schema.validateDataAganistSchema(data, this.dbName, this.docName);
+      this.schema.validateDataAganistSchema(data, this.dbName, this.colName);
     }
     data.createdAt = new Date();
     collection.push(data);

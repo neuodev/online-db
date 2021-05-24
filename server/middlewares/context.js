@@ -15,7 +15,7 @@ module.exports.applyCtx = (req, res, next) => {
 
   for (let info of context) {
     const { database, documents } = info;
-    console.log(database instanceof OnlineDB);
+
     if (typeof database == 'undefined')
       return next(new ErrorResponse(`Missing the database field`, 400));
 
