@@ -6,7 +6,7 @@ const errorHandler = require('./middlewares/error');
 const collectionRouter = require('./routes/collection');
 const ErrorResponse = require('./utils/ErrorResponse');
 
-const { OnlineDB } = require('../index');
+const OnlineDB = require('../src');
 const Collection = require('../src/classes/Collection');
 
 const startServer = context => {
@@ -31,32 +31,27 @@ const startServer = context => {
 
     for (let info of context) {
       const { database, documents } = info;
-
+      console.log(database instanceof OnlineDB);
       if (typeof database == 'undefined')
-        return next(new ErrorResponse(`Missing the database field`.bgRed, 400));
+        return next(new ErrorResponse(`Missing the database field`, 400));
 
       if (!(database instanceof OnlineDB))
-        return next(new ErrorResponse(`Invalide database field`.bgRed, 400));
+        return next(new ErrorResponse(`Invalide database field`, 400));
 
       if (typeof documents === 'undefined')
-        return next(
-          new ErrorResponse(`Missing the documents field`.bgRed, 400)
-        );
+        return next(new ErrorResponse(`Missing the documents field`, 400));
 
       if (!(documents instanceof Array))
         return next(
           new ErrorResponse(
-            `document field expected to be an array but get a/an ${typeof documents}`.bgRed,
+            `document field expected to be an array but get a/an ${typeof documents}`,
             400
           )
         );
       for (let document of documents) {
         if (!(document instanceof Collection))
           return next(
-            new ErrorResponse(
-              `"${document}" is not a valid document `.bgRed,
-              400
-            )
+            new ErrorResponse(`"${document}" is not a valid document `, 400)
           );
       }
     }

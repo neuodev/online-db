@@ -9,11 +9,8 @@ const {
   docNotFoundError,
   throwError,
   writeData,
-  checkSeclect,
-  initCollection,
 } = require('../utils/utils');
 const { applyFilter } = require('../helpers/applyFilter');
-const { selectionInvalidType } = require('../errors/collectionErrors');
 const { checkApplyRelation } = require('../relation');
 const { applySelection } = require('../helpers');
 const { applyUpdates } = require('../helpers/applyUpdates');

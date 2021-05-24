@@ -1,6 +1,5 @@
 const fs = require('fs');
 const readline = require('readline');
-const { startServer } = require('../../server');
 
 const rl = readline.createInterface({
   input: process.stdin,
