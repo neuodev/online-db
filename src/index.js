@@ -15,7 +15,7 @@ module.exports = class OnlineDB {
   }
 
   createCollection(colName, schema) {
-    if (!colName) throw new Error('Document name is required');
+    if (!colName) throw new Error('Collection name is required'.bgRed);
     const validCollectionName = colName.toLowerCase();
     const docFile = `./OnlineDB/${this.dbName}/${validCollectionName}.onlinedb.db`;
 
