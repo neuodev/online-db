@@ -43,8 +43,17 @@ module.exports.getDocumentDtails = (req, res, next) => {
 
   const { colName, dbName, collectionPath, schema } = currentCollection;
 
+  const count = currentCollection.count();
+
+  const collectonSize = fs.statSync(collectionPath);
+
   const parsedSceam = parseSchema(schema.schema);
-  res
-    .status(201)
-    .json({ colName, dbName, collectionPath, schema: parsedSceam });
+  res.status(201).json({
+    colName,
+    dbName,
+    collectionPath,
+    schema: parsedSceam,
+    count,
+    size: collectonSize.size / 1000,
+  });
 };
