@@ -41,7 +41,8 @@ module.exports.getDocumentDtails = (req, res, next) => {
       )
     );
 
-  const { colName, dbName, collectionPath, schema } = currentCollection;
+  const { colName, dbName, collectionPath, schema, updatedAt, createdAt } =
+    currentCollection;
 
   const count = currentCollection.count();
 
@@ -55,5 +56,7 @@ module.exports.getDocumentDtails = (req, res, next) => {
     schema: parsedSceam,
     count,
     size: collectonSize.size / 1000,
+    updatedAt,
+    createdAt,
   });
 };
