@@ -14,7 +14,7 @@ module.exports.applyCtx = (req, res, next) => {
   // every item should be an object with two fields database -> string , documents array
 
   for (let info of context) {
-    const { database, documents } = info;
+    const { database, collections } = info;
 
     if (typeof database == 'undefined')
       return next(new ErrorResponse(`Missing the database field`, 400));
@@ -22,20 +22,20 @@ module.exports.applyCtx = (req, res, next) => {
     if (!(database instanceof OnlineDB))
       return next(new ErrorResponse(`Invalide database field`, 400));
 
-    if (typeof documents === 'undefined')
-      return next(new ErrorResponse(`Missing the documents field`, 400));
+    if (typeof collections === 'undefined')
+      return next(new ErrorResponse(`Missing the collections field`, 400));
 
-    if (!(documents instanceof Array))
+    if (!(collections instanceof Array))
       return next(
         new ErrorResponse(
-          `document field expected to be an array but get a/an ${typeof documents}`,
+          `document field expected to be an array but get a/an ${typeof collections}`,
           400
         )
       );
-    for (let document of documents) {
-      if (!(document instanceof Collection))
+    for (let collection of collections) {
+      if (!(collection instanceof Collection))
         return next(
-          new ErrorResponse(`"${document}" is not a valid document `, 400)
+          new ErrorResponse(`"${collection}" is not a valid document `, 400)
         );
     }
   }
