@@ -21,6 +21,12 @@ module.exports = class Collection {
     this.dbName = dbName;
     this.collectionPath = `./OnlineDB/${this.dbName}/${this.colName}.onlinedb.db`;
     this.schema = schema;
+    this.createdAt = new Date();
+    this.updatedAt = new Date();
+  }
+
+  _updatedAt() {
+    this.updatedAt = new Date();
   }
 
   count() {
@@ -43,6 +49,9 @@ module.exports = class Collection {
     data.createdAt = new Date();
     collection.push(data);
     writeData(collection, collectionPath);
+
+    this._updatedAt();
+
     return data;
   }
 
@@ -148,7 +157,8 @@ module.exports = class Collection {
     data[0].updatedAt = new Date();
 
     writeData(collection, this.collectionPath);
-
+    // updated at
+    this._updatedAt();
     return data[0];
   }
 
@@ -165,6 +175,9 @@ module.exports = class Collection {
     data = applyUpdates(data, this.schema.schema, fieldsToUpdate);
     // replace the old document by the new ones
     writeData(collection, this.collectionPath);
+
+    // updated at
+    this._updatedAt();
   }
 
   // Delete one by id
@@ -179,6 +192,9 @@ module.exports = class Collection {
 
     // delete the document
     documents = documents.filter(document => document.id !== id);
+
+    // updated at
+    this._updatedAt();
 
     writeData(documents, this.collectionPath);
   }
@@ -199,6 +215,8 @@ module.exports = class Collection {
         newCollection.push(document);
       }
     }
+    // updated at
+    this._updatedAt();
     writeData(newCollection, this.collectionPath);
   }
 
@@ -218,7 +236,8 @@ module.exports = class Collection {
     collection.splice(docIdx, 1);
 
     writeData(collection, this.collectionPath);
-
+    // updated at
+    this._updatedAt();
     return documentToDelete;
   }
 };
