@@ -29,7 +29,7 @@ module.exports.getDatabases = (req, res, next) => {
 //@access Public
 module.exports.createDatabase = (req, res, next) => {
   const { dbName } = req.params;
-  const { document } = req.body;
+  const { collection } = req.body;
 
   const dbNameLowercase = dbName.toLowerCase();
 
@@ -42,9 +42,9 @@ module.exports.createDatabase = (req, res, next) => {
   fs.mkdirSync(DB_PATH);
 
   // create an optional document
-  if (document) {
-    const documentLowercase = document.toLowerCase();
-    const DOC_PATH = `./OnlineDB/${dbNameLowercase}/${documentLowercase}.onlinedb.db`;
+  if (collection) {
+    const collectionLowercase = collection.toLowerCase();
+    const DOC_PATH = `./OnlineDB/${dbNameLowercase}/${collectionLowercase}.onlinedb.db`;
     if (fs.existsSync(DOC_PATH)) {
       return next(new ErrorResponse(`Document not found`, 400));
     }
