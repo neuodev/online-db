@@ -99,23 +99,7 @@ module.exports.deleteCollection = (req, res, next) => {
         400
       )
     )
+  fs.rmdirSync(COLLECTION_PATH, { recursive: true })
 
-  const { colName, dbName, collectionPath, schema, updatedAt, createdAt } =
-    currentCollection
-
-  const count = currentCollection.count()
-
-  const collectonSize = fs.statSync(collectionPath)
-
-  const parsedSceam = parseSchema(schema.schema)
-  res.status(201).json({
-    colName,
-    dbName,
-    collectionPath,
-    schema: parsedSceam,
-    count,
-    size: collectonSize.size / 1000,
-    updatedAt,
-    createdAt,
-  })
+  res.status(201).json({ success: true })
 }
