@@ -160,6 +160,7 @@ the ObjectId type for OnlineDB so it will now that you want a relation
 
 
 ### Also notice that in the product collection you have in each product a user field and its value is the id of this user in this way OnlineDB will understand that when you query for products it will replace the user field id with actual information
+```js
         if (process.argv[2] === '-i') {
           User.insertMany([
             { id: '1', name: 'jone', products: ['1', '2'] },
@@ -176,6 +177,7 @@ the ObjectId type for OnlineDB so it will now that you want a relation
             { id: '5', name: 'iPad pro ', user: '5' },
           ]);
         }
+```
 ## Now Time to query your data
 ### Go a long with me here now we are querying for all users and we need them to have the information for each product
 * So we add the populate method that have field property and this field represent witch field we want to populate witch in our case is products and you have it now. if you print the users in the console you will have each user an his products
